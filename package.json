@@ -1,0 +1,22 @@
+{
+  "name": "ms-legacy-adapter",
+  "private": true,
+  "version": "0.0.1",
+  "author": {
+    "name": "Raquel Lopez",
+    "email": "raquelcle@gmail.com"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "terser": "^5.39.2",
+    "@types/node": "^22.14.1",
+    "@memberstack/dom": "^1.9.40"
+  }
+}
