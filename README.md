@@ -40,5 +40,31 @@ window.__MS_ADAPTER_CONFIG__ = {
 ## 📦 Project Structure
 WIP
 
+```markdown
+main.js (entry point)
+│
+├──→ loader/detect-env.ts
+│     └── decides whether to enable the adapter
+│
+├──→ if enabled:
+│     ├── dynamically import $memberstackDom (2.0)
+│     ├── adapter/v2-wrapper.ts
+│     │     └── wraps 2.0 API into a unified interface
+│     │
+│     ├── adapter/compatibility-map.ts
+│     │     └── maps method/field names from v1 to v2
+│     │
+│     └── adapter/v1-api.ts
+│           └── mimics MemberStack 1.0 API
+│               and exposes it globally via:
+│
+└──→ window.MemberStack = Proxy(adapter)
+
+Your legacy custom code
+└── continues calling window.MemberStack like before
+    but it's routed to 2.0 behavior via the shim
+
+```
+
 ## 🧪 Get started
 WIP

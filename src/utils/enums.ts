@@ -1,0 +1,1 @@
+export const LOCAL_SESSION_NAME = "ms2_enabled"
