@@ -12,13 +12,8 @@ declare global {
         Webflow: any;
         MemberStack: any;
         __MemberStackOriginal: typeof window.MemberStack;
-        memberstackConfig: DOMConfig
+        memberstackConfig: AdapterConfig
         $memberstackReady?: boolean;
         $memberstackDom?: MemberstackDom;
-        MemberstackAdapterConfig: AdapterConfig;
-        _msConfig?: {
-            verifyPageLoad?: boolean;
-            preventLogin?: boolean;
-        };
     }
 }

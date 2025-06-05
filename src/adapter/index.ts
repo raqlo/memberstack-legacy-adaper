@@ -5,7 +5,7 @@ import {createV1API} from "./v1-api";
 export function createLegacyProxy($memberstackDomInstance: MemberstackDom) {
     const wrapped = createV1API($memberstackDomInstance); // your custom bridge
 
-    return new Proxy({}, {
+    return new Proxy(window.MemberStack, {
         get(_, key) {
             if (key in wrapped) {
                 return wrapped[key];
