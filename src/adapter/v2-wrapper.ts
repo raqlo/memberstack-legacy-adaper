@@ -6,7 +6,7 @@ import type {MemberstackDom} from "../types/globals";
 import type {onReadyPayload} from "../types/v1-entities";
 
 
-export default function wrapV2($dom: MemberstackDom) {
+export default function buildV2Bridge($dom: MemberstackDom) {
     return {
         // Add more adapters as needed
     };

@@ -3,11 +3,11 @@
  * It defines the surface area expected by existing custom code (e.g., MemberStack.getMember(), MemberStack.onReady(), etc.).
  */
 
-import wrapV2, {onReadyPromise} from './v2-wrapper.js';
+import buildV2Bridge, {onReadyPromise} from './v2-wrapper.js';
 import type {MemberstackDom} from "../types/globals";
 
 export function createV1API(memberstackInstance: MemberstackDom) {
-    const v2 = wrapV2(memberstackInstance);
+    const v2 = buildV2Bridge(memberstackInstance);
 
     return {
         onReady: onReadyPromise(),
