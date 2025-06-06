@@ -3,27 +3,29 @@
  * It handles data shape changes, promises normalization, etc.
  */
 import type {MemberstackDom} from "../types/globals";
+import type {onReadyPayload} from "../types/v1-entities";
 
 
 export default function wrapV2($dom: MemberstackDom) {
     return {
-        onReady(callback: Function) {
-            $dom.getCurrentMember().then(() => callback());
-        },
-
-        // async getMember() {
-        //     const member = await $dom.getCurrentMember();
-        //     return {
-        //         id: member.data.id,
-        //         email: member.data.id,
-        //         // ... transform to match MS 1.0 shape if needed
-        //     };
-        // },
-        //
-        // logout() {
-        //     return $dom.logout();
-        // },
-
         // Add more adapters as needed
     };
+}
+
+let cachedOnReady: onReadyPayload;
+
+export async function onReadyPromise(): Promise<onReadyPayload> {
+    if (!cachedOnReady) {
+        const currentMember = await window.$memberstackDom?.getCurrentMember();
+        cachedOnReady = {
+            getMetaData() {},
+            memberPage: undefined,
+            membership: undefined,
+            updateMetaData() {},
+            updateProfile() {},
+            email: currentMember?.data ? currentMember.data.auth.email : '',
+            loggedIn: !!currentMember?.data
+        };
+    }
+    return cachedOnReady;
 }

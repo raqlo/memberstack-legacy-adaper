@@ -8,10 +8,10 @@ export function createLegacyProxy($memberstackDomInstance: MemberstackDom) {
     return new Proxy(window.MemberStack, {
         get(_, key) {
             if (key in wrapped) {
+                // @ts-ignore @ts-expect-error ToDo create v1 lib type and type this declaration type Key = keyof typeof wrapped;
                 return wrapped[key];
             }
 
-            // Optional: warn if method is missing
             console.warn(`[Adapter] Method "${String(key)}" not found in adapter.`);
             return undefined;
         }

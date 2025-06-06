@@ -2,7 +2,7 @@ import { shouldUseAdapter } from './loader/detect-env.js';
 import { createLegacyProxy } from './adapter';
 import { log } from './utils/logger.js';
 import type {DOMConfig} from "@memberstack/dom/lib/methods/index";
-import config from "./config";
+import {config} from "./config";
 
 async function enableLegacyAdapter() {
     // Dynamically load Memberstack 2.0 if not already present
@@ -25,7 +25,6 @@ async function enableLegacyAdapter() {
 
 function loadScript(src: string, config: DOMConfig) {
     window.memberstackConfig = window.memberstackConfig || config;
-debugger;
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
         script.src = src;
@@ -39,7 +38,7 @@ debugger;
 }
 
 
-if (shouldUseAdapter()) {
+if (shouldUseAdapter(config)) {
     enableLegacyAdapter();
 } else {
     log('[Adapter] Adapter not enabled — using native Memberstack 1.0.');
