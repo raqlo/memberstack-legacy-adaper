@@ -1,1 +1,27 @@
 export const LOCAL_SESSION_NAME = "ms2_enabled"
+
+export const MS_SELECTORS_HIDDEN_ON_INIT = [
+    "[data-ms-content='has-failed-payment']",
+    "[data-ms-content='!has-failed-payment']",
+    "[data-ms-content='verified']",
+    "[data-ms-content='!verified']",
+    "[data-ms-content='is-trialing']",
+    "[data-ms-content='members']",
+    "[data-ms-content='free-plans']",
+    "[data-ms-content='paid-plans']",
+    "[data-ms-content='no-plans']",
+    "[data-ms-plan\\:remove]",
+    "[data-ms-action=customer-portal]",
+    "[data-ms-action=delete-member]",
+    "[data-ms-form='profile']",
+    "[data-ms-form='email']",
+    "[data-ms-form='password']",
+    "[data-ms-action='logout']",
+    "[data-ms-action='login-redirect']",
+    "[data-ms-modal='profile']",
+    "[data-ms-modal='login']",
+    "[data-ms-modal='signup']",
+    "[data-ms-action='resend-verification-email']",
+    "[data-ms-action='customer-portal']",
+    "[data-ms-action='return-to-checkout']",
+]

@@ -6,11 +6,23 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Work Life Balance</title>
     <!-- Memberstack -->
-    <script src="https://api.memberstack.io/static/memberstack.js?webflow" data-memberstack-id="888c1db997d6d6e5601e4d3ffc5f0ba9"> </script>
+<!--    <script src="https://api.memberstack.io/static/memberstack.js?webflow" data-memberstack-id="888c1db997d6d6e5601e4d3ffc5f0ba9"> </script>-->
+    <script type="module" src="/src/main.ts"></script>
+<!--    <script src="http://localhost:4173/memberstack-adapter.js"></script>-->
 
 </head>
 <body>
-<div id="app"></div>
-<script src="/src/main.ts" type="module"></script>
+<div id="app">
+    <button data-ms-modal="login">Login </button>
+    <button data-ms-modal="profile">Profile</button>
+</div>
+<script>
+    window.addEventListener('load', () => {
+    
+    window.MemberStack.onReady.then(e => console.log(e))
+    })
+    
+
+</script>
 </body>
 </html>

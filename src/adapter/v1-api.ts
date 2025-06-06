@@ -7,6 +7,7 @@ import buildV2Bridge, {onReadyPromise} from './v2-wrapper.js';
 import type {MemberstackDom} from "../types/globals";
 
 export function createV1API(memberstackInstance: MemberstackDom) {
+    // @ts-ignore
     const v2 = buildV2Bridge(memberstackInstance);
 
     return {

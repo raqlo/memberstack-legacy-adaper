@@ -4,15 +4,23 @@ export interface AdapterConfig extends DOMConfig {
    adapter: {
        enabled: boolean;
        forceEnabled: boolean;
+       /**
+        * ToDo review the format of this array
+        * [v1MembershipId, v2PlanId]
+        */
+       importedMemberships: Array<[string, string]>;
    }
+   appIdV1: string;
     debug: boolean;
 }
 
 const defaultConfig: AdapterConfig = {
     adapter: {
         enabled: true,
-        forceEnabled: true // it won't require cookie or query param to work
+        forceEnabled: true, // it won't require cookie or query param to work
+        importedMemberships: [["5e9ddf661c838d00172a2bd2", "pln_work-life-balance-7b1nt01ro"],]
     },
+    appIdV1: import.meta.env.VITE_APP_ID_V1,
     publicKey: import.meta.env.VITE_PUBLIC_KEY_V2,
     appId: import.meta.env.VITE_APP_ID_V2,
     debug: true

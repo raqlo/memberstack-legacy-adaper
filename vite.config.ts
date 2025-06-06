@@ -10,18 +10,23 @@ export default defineConfig((_params) => {
         build: {
             minify: 'terser',
             lib: {
-                entry: resolve(__dirname, 'src/main.ts'),
-                name: 'MemberstackLegacyAdapter',
-                fileName: 'main',
+                entry: 'src/main.ts', // or your entry point
+                name: 'MemberStackAdapter',
+                formats: ['iife'], // key setting
+                fileName: () => `memberstack-adapter.js`,
             },
             rollupOptions: {
                 external: ['jquery'],
-                output: {
-                    format: 'iife',
-                    globals: {
-                        jquery: '$'
-                    }
-                }
+                input: resolve(__dirname, 'src/main.ts'),
+                // output: {
+                //     format: 'iife',
+                //     dir: resolve(__dirname, './dist'),
+                //     entryFileNames: 'main.js',
+                //     assetFileNames: 'style.css',
+                //     globals: {
+                //         jquery: '$'
+                //     }
+                // }
             }
         },
     }
