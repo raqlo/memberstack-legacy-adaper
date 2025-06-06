@@ -15,7 +15,7 @@ const defaultConfig: AdapterConfig = {
     },
     publicKey: import.meta.env.VITE_PUBLIC_KEY_V2,
     appId: import.meta.env.VITE_APP_ID_V2,
-    debug: false
+    debug: true
 };
 
 // Utility function to merge configurations

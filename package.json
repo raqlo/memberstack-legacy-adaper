@@ -13,10 +13,13 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "typescript": "~5.8.3",
-    "vite": "^6.3.5",
-    "terser": "^5.41.0",
+    "@memberstack/dom": "^1.9.40",
     "@types/node": "^22.14.1",
-    "@memberstack/dom": "^1.9.40"
+    "terser": "^5.41.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "consola": "^3.4.2"
   }
 }
