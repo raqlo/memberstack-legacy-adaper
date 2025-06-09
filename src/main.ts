@@ -78,12 +78,16 @@ function patchMemberStackOnReady() {
         }
     });
 
-    // Store the resolve function in the existing object so it can be called later
+    // Store the resolve function in the existing object so it can be called later in onReadyPromise()
     (existing).__resolveOnReady = resolveOnReady!;
 
     window.MemberStack = existing;
 }
 
+
+/**
+ * Main entry point.
+ */
 
 (async function () {
     if (shouldUseAdapter(config)) {

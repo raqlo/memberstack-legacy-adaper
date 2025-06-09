@@ -1,4 +1,5 @@
 import type {GetCurrentMemberPayload} from "@memberstack/dom";
+import {logger} from "./logger";
 
 const V1_SESSION_NAME = '__ms';
 const V1_STRIPE_MID = '__stripe_mid'
@@ -13,6 +14,7 @@ export function deleteV1Session() {
     document.cookie = `${V1_STRIPE_SESSION_ID}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 
     localStorage.removeItem('memberstack');
+    logger('info', '[Adapter] V1 Session deleted');
 }
 
 export function isMemberAuthV2() {
