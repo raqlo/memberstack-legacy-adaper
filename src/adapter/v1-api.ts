@@ -3,7 +3,7 @@
  * It defines the surface area expected by existing custom code (e.g., MemberStack.getMember(), MemberStack.onReady(), etc.).
  */
 
-import buildV2Bridge, {onReadyPromise} from './v2-wrapper.js';
+import buildV2Bridge, {onReadyPromise} from './build-v2-bridge';
 import type {MemberstackDom} from "../types/globals";
 
 export function createV1API(memberstackInstance: MemberstackDom) {
@@ -12,8 +12,9 @@ export function createV1API(memberstackInstance: MemberstackDom) {
 
     return {
         onReady: onReadyPromise(),
-        // getMember: v2.getMember,
-        // logout: v2.logout,
-        // Any other MemberStack 1.0-style methods you need to support
+        getToken: v2.getToken,
+        reload: v2.reload,
+        logout: v2.logout,
+        selectMembership: v2.selectMembership, // it creates a ms-plan cookie... what for?
     };
 }

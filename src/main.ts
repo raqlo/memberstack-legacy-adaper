@@ -57,31 +57,22 @@ function loadScript(src: string, config: Partial<AdapterConfig>) {
  * Once the data is ready, we resolve the promise manually via __resolveOnReady.
  */
 function patchMemberStackOnReady() {
-    const existing = window.MemberStack || {};
-    let resolveOnReady: (val: any) => void;
-    /** Create a Promise for MemberStack.onReady that doesn't resolve immediately.
-     * Instead, we store its resolve function (resolveOnReady) so it can be manually
-     * called later — once the Memberstack v2 data is ready. This allows us to mimic
-     * the v1 behavior where scripts can rely on MemberStack.onReady even if v2 isn't ready yet.
-     */
-    const onReady = new Promise((resolve) => {
-        resolveOnReady = resolve;
-    });
+    if (!window.MemberStack) {
+        let resolveOnReady: (val: any) => void;
+        /** Create a Promise for MemberStack.onReady that doesn't resolve immediately.
+         * Instead, we store its resolve function (resolveOnReady) so it can be manually
+         * called later — once the Memberstack v2 data is ready. This allows us to mimic
+         * the v1 behavior where scripts can rely on MemberStack.onReady even if v2 isn't ready yet.
+         */
+        const onReady = new Promise((resolve) => {
+            resolveOnReady = resolve;
+        });
 
-
-    // Override the onReady function with a promise
-    Object.defineProperty(existing, 'onReady', {
-        configurable: true,
-        enumerable: true,
-        get() {
-            return onReady;
-        }
-    });
-
-    // Store the resolve function in the existing object so it can be called later in onReadyPromise()
-    (existing).__resolveOnReady = resolveOnReady!;
-
-    window.MemberStack = existing;
+        window.MemberStack = {
+            onReady,
+            __resolveOnReady: resolveOnReady!,
+        };
+    }
 }
 
 
