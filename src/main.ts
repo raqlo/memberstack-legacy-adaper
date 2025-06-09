@@ -2,7 +2,7 @@ import {shouldUseAdapter} from './loader/detect-env.js';
 import {createLegacyProxy} from './adapter';
 import {logger} from './utils/logger.js';
 import {type AdapterConfig, config} from "./config";
-import {deleteV1Session} from "./utils/v1-sessions";
+import {deleteV1Session} from "./utils/sessions";
 
 async function enableLegacyAdapter() {
     // Dynamically load Memberstack 2.0 if not already present
@@ -41,7 +41,7 @@ function loadScript(src: string, config: Partial<AdapterConfig>) {
             reject(new Error(`Failed to load ${src}`));
         };
 
-        if(!config.adapter?.forceEnabled) {
+        if (!config.adapter?.forceEnabled) {
             const scr = document.head.appendChild(script)
             scr.setAttribute('data-memberstack-id', config.appIdV1!)
         } else {
@@ -50,16 +50,26 @@ function loadScript(src: string, config: Partial<AdapterConfig>) {
     });
 }
 
-// 🧩 Patch legacy MemberStack.onReady as early as possible
+/**
+ * Grabs the existing MemberStack object if it exists — otherwise creates an empty one.
+ * Replaces MemberStack.onReady with a custom Promise that doesn't resolve immediately.
+ * This allows other scripts to call MemberStack.onReady() before v2 has loaded.
+ * Once the data is ready, we resolve the promise manually via __resolveOnReady.
+ */
 function patchMemberStackOnReady() {
-    
     const existing = window.MemberStack || {};
     let resolveOnReady: (val: any) => void;
+    /** Create a Promise for MemberStack.onReady that doesn't resolve immediately.
+     * Instead, we store its resolve function (resolveOnReady) so it can be manually
+     * called later — once the Memberstack v2 data is ready. This allows us to mimic
+     * the v1 behavior where scripts can rely on MemberStack.onReady even if v2 isn't ready yet.
+     */
     const onReady = new Promise((resolve) => {
         resolveOnReady = resolve;
     });
 
-    // Replace only onReady with a deferred promise
+
+    // Override the onReady function with a promise
     Object.defineProperty(existing, 'onReady', {
         configurable: true,
         enumerable: true,
@@ -68,9 +78,8 @@ function patchMemberStackOnReady() {
         }
     });
 
-
-    // Internal field we’ll call from v1-api once ready
-    (existing as any).__resolveOnReady = resolveOnReady!;
+    // Store the resolve function in the existing object so it can be called later
+    (existing).__resolveOnReady = resolveOnReady!;
 
     window.MemberStack = existing;
 }
@@ -78,13 +87,12 @@ function patchMemberStackOnReady() {
 
 (async function () {
     if (shouldUseAdapter(config)) {
+        logger('info', '[Adapter] V2 Adapter enabled.');
         deleteV1Session();
-        // unhideMsElements();
         patchMemberStackOnReady();
         await enableLegacyAdapter();
     } else {
+        logger('info', '[Adapter] Adapter not enabled — using native Memberstack 1.0.');
         await loadScript('https://api.memberstack.io/static/memberstack.js?webflow', config);
-        debugger;
-        logger('warn', '[Adapter] Adapter not enabled — using native Memberstack 1.0.');
     }
 })()

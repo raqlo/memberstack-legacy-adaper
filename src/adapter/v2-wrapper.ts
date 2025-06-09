@@ -4,6 +4,7 @@
  */
 import type {MemberstackDom} from "../types/globals";
 import type {onReadyPayload} from "../types/v1-entities";
+import {getCurrentMemberV2, isMemberAuthV2} from "../utils/sessions";
 
 // import {adaptPlanObject} from "./v2-object-map";
 // import {logger} from "../utils/logger";
@@ -16,39 +17,47 @@ export default function buildV2Bridge($dom: MemberstackDom) {
     };
 }
 
+/**
+ * In-memory cache to ensure we don’t resolve the Promise more than once or recompute unnecessarily
+ */
 let cachedOnReady: onReadyPayload | undefined;
 
-function pollForDom(resolve: (payload: onReadyPayload) => void) {
-    const currentMemberRaw = localStorage.getItem('_ms-mem');
-    let currentMember: any;
+/**
+ * Polls for the MemberStack 2.0 API to be ready. This is used to implement the onReadyPromise() function.
+ */
 
-    try {
-        currentMember = currentMemberRaw ? JSON.parse(currentMemberRaw) : null;
-    } catch {
-        currentMember = null;
-    }
-
+function pollForMsV2(resolve: (payload: onReadyPayload) => void) {
+    const currentMember = getCurrentMemberV2()
     resolve({
         email: currentMember?.auth?.email || '',
-        loggedIn: !!currentMember?.data,
-        getMetaData() {},
-        updateMetaData() {},
-        updateProfile() {},
+        loggedIn: isMemberAuthV2(),
+        getMetaData() {
+        },
+        updateMetaData() {
+        },
+        updateProfile() {
+        },
         memberPage: undefined,
         membership: null,
     });
 }
 
+/**
+ * Returns a Promise that resolves once the MemberStack 2.0 API is ready. The Promise will resolve with the same
+ * payload as the legacy 1.0 API. The Promise will be resolved only once. If the legacy 1.0 API is already ready,
+ * the Promise will resolve immediately. The Promise will never reject.
+ */
+
 export async function onReadyPromise(): Promise<onReadyPayload> {
     if (cachedOnReady) return cachedOnReady;
 
     await new Promise<onReadyPayload>((resolve) => {
-        pollForDom((payload) => {
+        pollForMsV2((payload) => {
             cachedOnReady = payload;
 
-            if ((window.MemberStack as any).__resolveOnReady) {
-                (window.MemberStack as any).__resolveOnReady(cachedOnReady);
-                delete (window.MemberStack as any).__resolveOnReady;
+            if ((window.MemberStack).__resolveOnReady) {
+                (window.MemberStack).__resolveOnReady(cachedOnReady);
+                delete (window.MemberStack).__resolveOnReady; //why we have to delete this
             }
 
             resolve(payload);
