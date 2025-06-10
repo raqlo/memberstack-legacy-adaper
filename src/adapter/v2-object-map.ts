@@ -2,11 +2,11 @@ import type {v2PlanItem} from "../types/v2-entities";
 import type {v1PlanItem} from "../types/v1-entities";
 
 // @ts-ignore
-export function adaptMemberObject(v2Member) {
+export function adaptMemberObject(v2MemberPayload) {
     return {
-        id: v2Member.id,
-        email: v2Member.email,
-        customFields: v2Member.data, // v1 used "customFields", v2 uses "data"
+        id: v2MemberPayload.id,
+        email: v2MemberPayload.email,
+        customFields: v2MemberPayload.data, // v1 used "customFields", v2 uses "data"
     };
 }
 

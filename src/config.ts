@@ -16,7 +16,7 @@ export interface AdapterConfig extends DOMConfig {
 
 const defaultConfig: AdapterConfig = {
     adapter: {
-        enabled: true,
+        enabled: false,
         forceEnabled: true, // it won't require cookie or query param to work
         importedMemberships: [["5e9ddf661c838d00172a2bd2", "pln_work-life-balance-7b1nt01ro"],]
     },

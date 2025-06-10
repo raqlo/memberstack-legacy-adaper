@@ -17,6 +17,10 @@
     <button data-ms-modal="profile">Profile</button>
 </div>
 <script>
+    /**
+     * While developing, I cannot simulate a blocking script on the page because module scripts are loaded asynchronously.
+     * Because of this, I am using the load event to simulate the blocking script.
+     */
     window.addEventListener('load', () => {
     
     window.MemberStack.onReady.then(e => console.log(e))

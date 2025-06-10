@@ -86,7 +86,7 @@ export async function onReadyPromise(): Promise<onReadyPayload> {
 
             if ((window.MemberStack).__resolveOnReady) {
                 (window.MemberStack).__resolveOnReady(cachedOnReady);
-                delete (window.MemberStack).__resolveOnReady; //why we have to delete this
+                delete (window.MemberStack).__resolveOnReady;
             }
 
             resolve(payload);
