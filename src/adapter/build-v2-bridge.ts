@@ -54,18 +54,19 @@ function pollForMsV2(resolve: (payload: onReadyPayload) => void) {
             logger('warn', '[Adapter] getMetaData() called while member is not authenticated. Returning empty object.')
             return {}
         },
-        updateMetaData(metadataParams: UpdateMemberJSONParams) {
+        updateMetaData(metadataParams: UpdateMemberJSONParams['json']) {
             if (currentMember) {
-                return window.$memberstackDom?.updateMemberJSON(metadataParams);
+                return window.$memberstackDom?.updateMemberJSON({json: metadataParams});
             }
             logger('warn', '[Adapter] updateMetaData() called while member is not authenticated. Returning empty object.')
         },
-        updateProfile(customFields: UpdateMemberParams) {
+        updateProfile(customFields: UpdateMemberParams['customFields']) {
             if (currentMember) {
-                return window.$memberstackDom?.updateMember(customFields);
+                return window.$memberstackDom?.updateMember({customFields});
             }
             logger('warn', '[Adapter] updateProfile() called while member is not authenticated. Returning empty object.')
         },
+        // ToDo find out how to adapt these into v2
         memberPage: undefined,
         membership: null
     });
