@@ -1,4 +1,4 @@
-import {shouldUseAdapter} from './loader/detect-env.js';
+import {shouldUseAdapter} from './loader/detect-ms-version';
 import {createLegacyProxy} from './adapter';
 import {logger} from './utils/logger.js';
 import {type AdapterConfig, config} from "./config";
@@ -41,7 +41,7 @@ function loadScript(src: string, config: Partial<AdapterConfig>) {
             reject(new Error(`Failed to load ${src}`));
         };
 
-        if (!config.adapter?.forceEnabled) {
+        if (!config.adapter?.enabled) {
             const scr = document.head.appendChild(script)
             scr.setAttribute('data-memberstack-id', config.appIdV1!)
         } else {
