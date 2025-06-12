@@ -12,7 +12,7 @@ export interface AdapterConfig extends DOMConfig {
 
 const defaultConfig: AdapterConfig = {
     adapter: {
-        enabled: false,
+        enabled: true,
         currentVersion: "v1",
         importedMemberships: JSON.parse(import.meta.env.VITE_MEMBERSHIPS_MAP_TARGET),
     },

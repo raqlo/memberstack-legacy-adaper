@@ -41,7 +41,7 @@ function loadScript(src: string, config: Partial<AdapterConfig>) {
             reject(new Error(`Failed to load ${src}`));
         };
 
-        if (!config.adapter?.enabled) {
+        if (config.adapter?.currentVersion === 'v1') {
             const scr = document.head.appendChild(script)
             scr.setAttribute('data-memberstack-id', config.appIdV1!)
         } else {
@@ -81,7 +81,7 @@ function patchMemberStackOnReady() {
  */
 
 (async function () {
-    if (shouldUseAdapter(config)) {
+    if (shouldUseAdapter(config) === 'v2') {
         logger('info', '[Adapter] V2 Adapter enabled.');
         deleteV1Session();
         patchMemberStackOnReady();

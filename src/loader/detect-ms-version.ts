@@ -8,12 +8,12 @@ import {logger} from "../utils/logger";
 
 const ADAPTER_PARAM_NAME = 'adapter';
 
-export function shouldUseAdapter(config: AdapterConfig): boolean {
+export function shouldUseAdapter(_config: AdapterConfig): 'v1' | 'v2' {
     const queryParams = new URLSearchParams(window.location.search);
     const adapterInQuery = queryParams.get(ADAPTER_PARAM_NAME);
     const adapterInSession = sessionStorage.getItem(LOCAL_SESSION_NAME);
     if(adapterInSession === 'true') {
-        return true;
+        return 'v2';
     }
 
     // If `adapter=true` is in query params, set session storage and clean up query param
@@ -24,6 +24,5 @@ export function shouldUseAdapter(config: AdapterConfig): boolean {
         logger('info', '[Adapter] Adapter found. Setting session storage and cleaning up query params.');
     }
 
-    // Check if the adapter is enabled in config or in session storage
-    return config.adapter.enabled && adapterInSession === 'true';
+    return adapterInSession === 'true' ? 'v2' : 'v1';
 }
