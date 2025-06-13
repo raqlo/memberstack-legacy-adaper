@@ -1,4 +1,6 @@
 # Memberstack Legacy Adapter
+![Version](https://img.shields.io/badge/version-v0.0.1-blue)
+
 
 The **Memberstack Legacy Adapter** is a small compatibility layer (also known as a **shim**) that helps safely transition from **Memberstack 1.0** to **2.0**.
 
@@ -20,15 +22,17 @@ Many existing projects rely on Memberstack 1.0 with custom code that’s challen
 - **Monitoring:** Logs or tracking can be added to monitor errors or API usage for early issue detection.
 
 ## ⚙️ Config Options
-WIP
-```js
-window.__MS_ADAPTER_CONFIG__ = {
-  enabled: true, // or false to disable
-  mode: "auto", // options: "cookie", "query", "manual"
-  debug: true, // logs to console for development
-};
 
-```
+| Property | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| `adapter.enabled` | `boolean` | No | `true` | Enable/disable the adapter functionality |
+| `adapter.currentVersion` | `"v1"` or `"v2"` | No | `"v1"` | Memberstack API version to use |
+| `adapter.importedMemberships` | `Record<string, string>` | No | `{}` | Mapping of membership IDs for migration |
+| `appIdV1` | `string` | Yes | - | Your Memberstack V1 App ID |
+| `publicKey` | `string` | Yes | - | Your Memberstack V2 Public Key |
+| `appId` | `string` | Yes | - | Your Memberstack V2 App ID |
+| `debug` | `boolean` | No | `true` | Enable debug logging |
+
 
 ## ✅ Benefits
 - Zero downtime
@@ -67,4 +71,10 @@ Your legacy custom code
 ```
 
 ## 🧪 Get started
-WIP
+
+### Install
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/raqlo/memberstack-adapter@v0.0.1/dist/memberstack-adapter.js"></script>
+```
+

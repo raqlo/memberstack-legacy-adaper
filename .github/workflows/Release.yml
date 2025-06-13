@@ -55,6 +55,18 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Update README with version
+        run: |
+          VERSION="v${{ steps.package-version.outputs.current-version }}"
+          
+          # Update version badge in README
+          sed -i "s/version-[^-]*-blue/version-${VERSION}-blue/g" README.md
+          
+          # Update CDN links with new version
+          sed -i "s/@v[0-9]\+\.[0-9]\+\.[0-9]\+/@${VERSION}/g" README.md
+          
+          echo "✅ Updated README with version $VERSION"
+
       - name: Release with error handling
         run: |
           set -e
@@ -70,18 +82,9 @@ jobs:
           fi
           
           git add -f dist/
+          git add README.md  # Add updated README
           git commit -m "build: $VERSION"
           git tag "$VERSION"
           git push origin master --tags
           
           echo "✅ Successfully released $VERSION"
-
-      - name: Summary
-        if: always()
-        run: |
-          if [ "${{ job.status }}" = "success" ]; then
-            echo "🎉 Release completed successfully!"
-            echo "📦 Available at: https://cdn.jsdelivr.net/gh/${{ github.repository }}@v${{ steps.package-version.outputs.current-version }}/dist/memberstack-adapter.js"
-          else
-            echo "💥 Release failed. Check logs above for details."
-          fi
