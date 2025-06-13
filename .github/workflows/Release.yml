@@ -52,6 +52,9 @@ jobs:
 
       - run: npm ci
 
+      - name: Build project
+        run: npm run build
+
       - name: Release with error handling
         run: |
           set -e
@@ -59,6 +62,12 @@ jobs:
           
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Check if dist folder exists
+          if [ ! -d "dist" ]; then
+            echo "❌ dist/ folder not found after build"
+            exit 1
+          fi
           
           git add -f dist/
           git commit -m "build: $VERSION"

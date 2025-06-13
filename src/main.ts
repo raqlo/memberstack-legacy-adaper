@@ -12,12 +12,12 @@ async function enableLegacyAdapter() {
             await loadScript('https://static.memberstack.com/scripts/v1/memberstack.js', config);
         }
 
-        const dom = window.$memberstackDom;
-        if (!dom) {
+        const msDom = window.$memberstackDom;
+        if (!msDom) {
             throw '[Adapter] Failed to load Memberstack 2.0'
         }
 
-        window.MemberStack = createLegacyProxy(dom);
+        window.MemberStack = createLegacyProxy(msDom);
 
 
         logger('trace', '[Adapter] Legacy adapter enabled and injected.');
