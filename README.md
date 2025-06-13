@@ -1,5 +1,5 @@
 # Memberstack Legacy Adapter
-![Version](https://img.shields.io/badge/version-v0.0.1-blue)
+![Version](https://img.shields.io/badge/version-v0.0.2-blue)
 
 
 The **Memberstack Legacy Adapter** is a small compatibility layer (also known as a **shim**) that helps safely transition from **Memberstack 1.0** to **2.0**.
@@ -75,6 +75,6 @@ Your legacy custom code
 ### Install
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/raqlo/memberstack-adapter@v0.0.1/dist/memberstack-adapter.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/raqlo/memberstack-adapter@v0.0.2/dist/memberstack-adapter.js"></script>
 ```
 
