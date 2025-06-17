@@ -82,6 +82,10 @@ function patchMemberStackOnReady() {
  */
 
 (async function () {
+    if(!config.adapter.enabled) {
+        logger('info', '[Adapter] Adapter disabled.');
+        return;
+    }
     if (shouldUseAdapter(config) === 'v2') {
         logger('info', '[Adapter] V2 Adapter enabled.');
         deleteV1Session();
