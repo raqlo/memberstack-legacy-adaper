@@ -1,9 +1,9 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { shouldUseAdapter } from '../../../src/loader/detect-ms-version';
+import { shouldUseAdapter } from '@/loader/detect-ms-version';
 import { createTestConfig, mockBrowserAPIs } from '../../helpers/test-utils';
-import { LOCAL_SESSION_NAME } from '../../../src/utils/enums';
-import type {AdapterConfig} from "../../../src/config";
+import { LOCAL_SESSION_NAME } from '@utils/enums';
+import type {AdapterConfig} from "@/config";
 
 describe('shouldUseAdapter', () => {
     let testConfig: AdapterConfig;

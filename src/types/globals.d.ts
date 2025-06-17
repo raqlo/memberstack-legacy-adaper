@@ -3,7 +3,7 @@ import type {
     DOMConfig
 } from "@memberstack/dom";
 
-import type {AdapterConfig} from "../config";
+import type {AdapterConfig} from "@/config";
 
 export type MemberstackDom = ReturnType<typeof MsTypes.init>;
 

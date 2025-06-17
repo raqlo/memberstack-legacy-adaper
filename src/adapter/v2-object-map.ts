@@ -1,5 +1,5 @@
-import type {v2PlanItem} from "../types/v2-entities";
-import type {v1PlanItem} from "../types/v1-entities";
+import type {v2PlanItem} from "@/types/v2-entities";
+import type {v1PlanItem} from "@/types/v1-entities";
 
 // @ts-ignore
 export function adaptMemberObject(v2MemberPayload) {

@@ -1,10 +1,10 @@
 import {shouldUseAdapter} from './loader/detect-ms-version';
 import {createLegacyProxy} from './adapter';
-import {logger} from './utils/logger.js';
+import {logger} from '@utils/logger';
 import {type AdapterConfig, config} from "./config";
-import {deleteV1Session} from "./utils/sessions";
-import {updateAllPlanAttributes} from "./adapter/dom/replacePlanAttributes";
-import {updateAllLogoutAttributes} from "./adapter/dom/replaceLogoutAttributes";
+import {deleteV1Session} from "@utils/sessions";
+import {updateAllPlanAttributes} from "@dom/replacePlanAttributes";
+import {updateAllLogoutAttributes} from "@dom/replaceLogoutAttributes";
 
 async function enableLegacyAdapter() {
     // Dynamically load Memberstack 2.0 if not already present

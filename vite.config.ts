@@ -7,6 +7,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig((_params) => {
     return {
+        resolve: {
+            alias: {
+                '@': resolve(__dirname, './src'),
+                '@adapter': resolve(__dirname, './src/adapter'),
+                '@utils': resolve(__dirname, './src/utils'),
+                '@dom': resolve(__dirname, './src/adapter/dom'),
+            }
+        },
         build: {
             minify: 'terser',
             lib: {
@@ -24,5 +32,8 @@ export default defineConfig((_params) => {
             environment: 'jsdom', // Needed for DOM testing
             globals: true,
         },
+        server: {
+            cors: true
+        }
     }
 })

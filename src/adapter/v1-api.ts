@@ -4,7 +4,7 @@
  */
 
 import buildV2Bridge, {onReadyPromise} from './build-v2-bridge';
-import type {MemberstackDom} from "../types/globals";
+import type {MemberstackDom} from "@/types/globals";
 
 export function createV1API(memberstackInstance: MemberstackDom) {
     // @ts-ignore

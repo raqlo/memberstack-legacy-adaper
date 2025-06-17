@@ -3,9 +3,9 @@
  * Detects whether the adapter should be activated (based on config, cookies, query params, etc.)
  */
 
-import type {AdapterConfig} from "../config";
-import {LOCAL_SESSION_NAME} from "../utils/enums";
-import {logger} from "../utils/logger";
+import type {AdapterConfig} from "@/config";
+import {LOCAL_SESSION_NAME} from "@utils/enums";
+import {logger} from "@utils/logger";
 
 const ADAPTER_PARAM_NAME = 'adapter';
 
