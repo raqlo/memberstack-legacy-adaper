@@ -18,16 +18,11 @@ export default defineConfig((_params) => {
             rollupOptions: {
                 external: ['jquery'],
                 input: resolve(__dirname, 'src/main.ts'),
-                // output: {
-                //     format: 'iife',
-                //     dir: resolve(__dirname, './dist'),
-                //     entryFileNames: 'main.js',
-                //     assetFileNames: 'style.css',
-                //     globals: {
-                //         jquery: '$'
-                //     }
-                // }
             }
+        },
+        test: {
+            environment: 'jsdom', // Needed for DOM testing
+            globals: true,
         },
     }
 })
