@@ -75,6 +75,6 @@ Your legacy custom code
 ### Install
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/raqlo/memberstack-adapter@v0.0.2/dist/memberstack-adapter.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/raqlo/memberstack-legacy-adaper@v0.0.2/dist/memberstack-adapter.js"></script>
 ```
 

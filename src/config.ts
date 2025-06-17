@@ -14,7 +14,7 @@ const defaultConfig: AdapterConfig = {
     adapter: {
         enabled: true,
         currentVersion: "v1",
-        importedMemberships: JSON.parse(import.meta.env.VITE_MEMBERSHIPS_MAP_TARGET),
+        importedMemberships: import.meta.env.VITE_MEMBERSHIPS_MAP_TARGET ? JSON.parse(import.meta.env.VITE_MEMBERSHIPS_MAP_TARGET) : {},
     },
     appIdV1: import.meta.env.VITE_APP_ID_V1,
     publicKey: import.meta.env.VITE_PUBLIC_KEY_V2,
