@@ -7,6 +7,9 @@ import {updateAllPlanAttributes} from "./adapter/dom/replacePlanAttributes";
 
 async function enableLegacyAdapter() {
     // Dynamically load Memberstack 2.0 if not already present
+    document.addEventListener('DOMContentLoaded', () => {
+        updateAllPlanAttributes(config.adapter.importedMemberships);
+    })
     logger('trace', '[Adapter] starting legacy adapter...')
     updateAllPlanAttributes(config.adapter.importedMemberships);
     try {
@@ -82,7 +85,7 @@ function patchMemberStackOnReady() {
  */
 
 (async function () {
-    if(!config.adapter.enabled) {
+    if (!config.adapter.enabled) {
         logger('start', '[Adapter] Adapter disabled.');
         return;
     }
