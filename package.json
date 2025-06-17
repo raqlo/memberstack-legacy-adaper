@@ -1,7 +1,7 @@
 {
   "name": "ms-legacy-adapter",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": {
     "name": "Raquel Lopez",
     "email": "raquelcle@gmail.com"
@@ -17,7 +17,6 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run"
-
   },
   "devDependencies": {
     "@memberstack/dom": "^1.9.40",
