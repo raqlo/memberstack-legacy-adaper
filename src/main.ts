@@ -7,7 +7,7 @@ import {updateAllPlanAttributes} from "./adapter/dom/replacePlanAttributes";
 
 async function enableLegacyAdapter() {
     // Dynamically load Memberstack 2.0 if not already present
-    logger('start', '[Adapter] starting legacy adapter...')
+    logger('trace', '[Adapter] starting legacy adapter...')
     updateAllPlanAttributes(config.adapter.importedMemberships);
     try {
         if (!window.$memberstackDom) {
@@ -21,7 +21,7 @@ async function enableLegacyAdapter() {
 
         window.MemberStack = createLegacyProxy(msDom);
 
-        logger('trace', '[Adapter] Legacy adapter enabled and injected.');
+        logger('trace', '[Adapter] 2.0 adapter enabled and injected.');
     } catch (e) {
         if (e instanceof Error && e.message) {
             logger('error', `${e.message}`, e);
@@ -83,16 +83,16 @@ function patchMemberStackOnReady() {
 
 (async function () {
     if(!config.adapter.enabled) {
-        logger('info', '[Adapter] Adapter disabled.');
+        logger('start', '[Adapter] Adapter disabled.');
         return;
     }
     if (shouldUseAdapter(config) === 'v2') {
-        logger('info', '[Adapter] V2 Adapter enabled.');
+        logger('start', '[Adapter] V2 Adapter enabled.');
         deleteV1Session();
         patchMemberStackOnReady();
         await enableLegacyAdapter();
     } else {
-        logger('info', '[Adapter] Adapter not enabled — using native Memberstack 1.0.');
+        logger('start', '[Adapter] Adapter not enabled — using native Memberstack 1.0.');
         await loadScript('https://api.memberstack.io/static/memberstack.js?webflow', config);
     }
 })()

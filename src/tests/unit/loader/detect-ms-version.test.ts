@@ -251,7 +251,7 @@ describe('shouldUseAdapter', () => {
 
             // Reset mocks for the second call
             vi.clearAllMocks();
-            const secondConfig: AdapterConfig = {
+            const secondConfig = createTestConfig({
                 adapter: {
                     enabled: true,
                     importedMemberships: {},
@@ -260,7 +260,7 @@ describe('shouldUseAdapter', () => {
                 publicKey: 'test-public-key',
                 appId: 'test-app-id-v2',
                 debug: true
-            };
+            });
 
             // Second call - session exists, no query param
             mocks.mockSessionStorage.getItem.mockReturnValue('true');
