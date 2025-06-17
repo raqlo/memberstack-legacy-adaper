@@ -3,10 +3,12 @@ import {createLegacyProxy} from './adapter';
 import {logger} from './utils/logger.js';
 import {type AdapterConfig, config} from "./config";
 import {deleteV1Session} from "./utils/sessions";
+import {updateAllPlanAttributes} from "./adapter/dom/replacePlanAttributes";
 
 async function enableLegacyAdapter() {
     // Dynamically load Memberstack 2.0 if not already present
     logger('start', '[Adapter] starting legacy adapter...')
+    updateAllPlanAttributes(config.adapter.importedMemberships);
     try {
         if (!window.$memberstackDom) {
             await loadScript('https://static.memberstack.com/scripts/v1/memberstack.js', config);
@@ -18,7 +20,6 @@ async function enableLegacyAdapter() {
         }
 
         window.MemberStack = createLegacyProxy(msDom);
-
 
         logger('trace', '[Adapter] Legacy adapter enabled and injected.');
     } catch (e) {
