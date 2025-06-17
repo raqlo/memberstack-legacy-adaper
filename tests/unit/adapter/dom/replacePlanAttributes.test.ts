@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { getPlanAttribute, replacePlanAttribute, updateAllPlanAttributes } from '../../../../adapter/dom/replacePlanAttributes';
+import { getPlanAttribute, replacePlanAttribute, updateAllPlanAttributes } from '../../../../src/adapter/dom/replacePlanAttributes';
 
 describe('getPlanAttribute', () => {
     it('should return price attribute for price IDs', () => {
