@@ -1,4 +1,4 @@
-import type { AdapterConfig } from '../../config';
+import type { AdapterConfig } from '../../src/config';
 import { vi } from 'vitest';
 
 export function createTestConfig(overrides: Partial<AdapterConfig> = {}): AdapterConfig {
