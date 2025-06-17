@@ -1,15 +1,7 @@
-import { describe, it, expect, beforeEach, vi, type MockedFunction } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { shouldUseAdapter } from './detect-ms-version';
 import type { AdapterConfig } from '../config';
 import { LOCAL_SESSION_NAME } from '../utils/enums';
-import { logger } from '../utils/logger';
-
-// Mock the logger
-vi.mock('../utils/logger', () => ({
-    logger: vi.fn()
-}));
-
-const mockLogger = logger as MockedFunction<typeof logger>;
 
 // Mock browser APIs
 const mockSessionStorage = {
@@ -45,12 +37,24 @@ Object.defineProperty(window, 'location', {
 });
 
 describe('shouldUseAdapter', () => {
-    const mockConfig: AdapterConfig = {} as AdapterConfig;
+    let testConfig: AdapterConfig;
 
     beforeEach(() => {
         vi.clearAllMocks();
         mockLocation.search = '';
         mockLocation.pathname = '/test-path';
+
+        // Use a real config structure
+        testConfig = {
+            adapter: {
+                enabled: true,
+                importedMemberships: {'old-plan-id': 'new-plan-id', 'old-price-id': 'new-price-id', 'old-membership-id': 'new-membership-id'},
+            },
+            appIdV1: 'test-app-id-v1',
+            publicKey: 'test-public-key',
+            appId: 'test-app-id-v2',
+            debug: true
+        };
     });
 
     describe('when adapter is already in session storage', () => {
@@ -58,9 +62,10 @@ describe('shouldUseAdapter', () => {
             mockSessionStorage.getItem.mockReturnValue('true');
             mockLocation.search = '';
 
-            const result = shouldUseAdapter(mockConfig);
+            const result = shouldUseAdapter(testConfig);
 
             expect(result).toBe('v2');
+            expect(testConfig.adapter.currentVersion).toBe('v2');
             expect(mockSessionStorage.getItem).toHaveBeenCalledWith(LOCAL_SESSION_NAME);
         });
 
@@ -68,95 +73,172 @@ describe('shouldUseAdapter', () => {
             mockSessionStorage.getItem.mockReturnValue('true');
             mockLocation.search = '?adapter=true';
 
-            const result = shouldUseAdapter(mockConfig);
+            const result = shouldUseAdapter(testConfig);
 
             expect(result).toBe('v2');
+            expect(testConfig.adapter.currentVersion).toBe('v2');
             expect(mockSessionStorage.getItem).toHaveBeenCalledWith(LOCAL_SESSION_NAME);
-            // Should not process query params since session storage takes precedence
         });
     });
 
     describe('when adapter query parameter is present', () => {
-        it('should set session storage and clean up query params when adapter=true', () => {
+        it('should return v2 and set session storage when adapter=true', () => {
             mockSessionStorage.getItem.mockReturnValue(null);
             mockLocation.search = '?adapter=true';
 
-            const result = shouldUseAdapter(mockConfig);
+            const result = shouldUseAdapter(testConfig);
 
+            expect(result).toBe('v2');
+            expect(testConfig.adapter.currentVersion).toBe('v2');
             expect(mockSessionStorage.setItem).toHaveBeenCalledWith(LOCAL_SESSION_NAME, 'true');
             expect(mockHistory.replaceState).toHaveBeenCalledWith({}, '', '/test-path');
-            expect(mockLogger).toHaveBeenCalledWith(
-                'info',
-                '[Adapter] Adapter found. Setting session storage and cleaning up query params.'
-            );
-            expect(result).toBe('v1'); // Returns v1 on the first call, v2 on later calls
+        });
+
+        it('should return v2 when adapter=v2', () => {
+            mockSessionStorage.getItem.mockReturnValue(null);
+            mockLocation.search = '?adapter=v2';
+
+            const result = shouldUseAdapter(testConfig);
+
+            expect(result).toBe('v2');
+            expect(testConfig.adapter.currentVersion).toBe('v2');
+            expect(mockSessionStorage.setItem).toHaveBeenCalledWith(LOCAL_SESSION_NAME, 'true');
+        });
+
+        it('should return v1 when adapter=v1', () => {
+            mockSessionStorage.getItem.mockReturnValue(null);
+            mockLocation.search = '?adapter=v1';
+
+            const result = shouldUseAdapter(testConfig);
+
+            expect(result).toBe('v1');
+            expect(testConfig.adapter.currentVersion).toBe('v1');
+            expect(mockSessionStorage.setItem).not.toHaveBeenCalled();
+            expect(mockHistory.replaceState).toHaveBeenCalledWith({}, '', '/test-path');
+        });
+
+        it('should return v1 when adapter=false', () => {
+            mockSessionStorage.getItem.mockReturnValue(null);
+            mockLocation.search = '?adapter=false';
+
+            const result = shouldUseAdapter(testConfig);
+
+            expect(result).toBe('v1');
+            expect(testConfig.adapter.currentVersion).toBe('v1');
+            expect(mockSessionStorage.setItem).not.toHaveBeenCalled();
+            expect(mockHistory.replaceState).toHaveBeenCalledWith({}, '', '/test-path');
         });
 
         it('should handle multiple query parameters correctly', () => {
             mockSessionStorage.getItem.mockReturnValue(null);
             mockLocation.search = '?adapter=true&other=value&foo=bar';
 
-            shouldUseAdapter(mockConfig);
+            shouldUseAdapter(testConfig);
 
-            // Should only remove the adapter parameter
-            expect(mockHistory.replaceState).toHaveBeenCalledWith({}, '', '/test-path');
+            expect(mockHistory.replaceState).toHaveBeenCalledWith({}, '', '/test-path?other=value&foo=bar');
             expect(mockSessionStorage.setItem).toHaveBeenCalledWith(LOCAL_SESSION_NAME, 'true');
         });
+    });
 
-        it('should not set session storage when adapter=false', () => {
+    describe('when forcedVersion is configured', () => {
+        it('should return v2 when forcedVersion is v2', () => {
             mockSessionStorage.getItem.mockReturnValue(null);
-            mockLocation.search = '?adapter=false';
+            mockLocation.search = '';
+            testConfig.adapter.forcedVersion = 'v2';
 
-            const result = shouldUseAdapter(mockConfig);
+            const result = shouldUseAdapter(testConfig);
 
-            expect(mockSessionStorage.setItem).not.toHaveBeenCalled();
-            expect(mockHistory.replaceState).not.toHaveBeenCalled();
-            expect(mockLogger).not.toHaveBeenCalled();
-            expect(result).toBe('v1');
+            expect(result).toBe('v2');
+            expect(testConfig.adapter.currentVersion).toBe('v2');
         });
 
-        it('should not set session storage when adapter has other values', () => {
+        it('should return v1 when forcedVersion is v1', () => {
             mockSessionStorage.getItem.mockReturnValue(null);
-            mockLocation.search = '?adapter=maybe';
+            mockLocation.search = '';
+            testConfig.adapter.forcedVersion = 'v1';
 
-            const result = shouldUseAdapter(mockConfig);
+            const result = shouldUseAdapter(testConfig);
 
-            expect(mockSessionStorage.setItem).not.toHaveBeenCalled();
-            expect(mockHistory.replaceState).not.toHaveBeenCalled();
-            expect(mockLogger).not.toHaveBeenCalled();
             expect(result).toBe('v1');
+            expect(testConfig.adapter.currentVersion).toBe('v1');
+        });
+
+        it('should prefer query param over forcedVersion', () => {
+            mockSessionStorage.getItem.mockReturnValue(null);
+            mockLocation.search = '?adapter=v1';
+            testConfig.adapter.forcedVersion = 'v2';
+
+            const result = shouldUseAdapter(testConfig);
+
+            expect(result).toBe('v1');
+            expect(testConfig.adapter.currentVersion).toBe('v1');
         });
     });
 
     describe('when no adapter indicators are present', () => {
-        it('should return v1 when no query params and no session storage', () => {
+        it('should return v1 when no query params, no session storage, and no forcedVersion', () => {
             mockSessionStorage.getItem.mockReturnValue(null);
             mockLocation.search = '';
 
-            const result = shouldUseAdapter(mockConfig);
+            const result = shouldUseAdapter(testConfig);
 
             expect(result).toBe('v1');
+            expect(testConfig.adapter.currentVersion).toBe('v1');
             expect(mockSessionStorage.setItem).not.toHaveBeenCalled();
             expect(mockHistory.replaceState).not.toHaveBeenCalled();
-            expect(mockLogger).not.toHaveBeenCalled();
         });
 
         it('should return v1 when session storage is empty string', () => {
             mockSessionStorage.getItem.mockReturnValue('');
             mockLocation.search = '';
 
-            const result = shouldUseAdapter(mockConfig);
+            const result = shouldUseAdapter(testConfig);
 
             expect(result).toBe('v1');
+            expect(testConfig.adapter.currentVersion).toBe('v1');
         });
 
         it('should return v1 when session storage has false', () => {
             mockSessionStorage.getItem.mockReturnValue('false');
             mockLocation.search = '';
 
-            const result = shouldUseAdapter(mockConfig);
+            const result = shouldUseAdapter(testConfig);
 
             expect(result).toBe('v1');
+            expect(testConfig.adapter.currentVersion).toBe('v1');
+        });
+    });
+
+    describe('config properties preservation', () => {
+        it('should set currentVersion on existing adapter object', () => {
+            mockSessionStorage.getItem.mockReturnValue(null);
+            mockLocation.search = '';
+
+            const result = shouldUseAdapter(testConfig);
+
+            expect(result).toBe('v1');
+            expect(testConfig.adapter.currentVersion).toBe('v1');
+            // Verify other properties are preserved
+            expect(testConfig.adapter.enabled).toBe(true);
+            expect(testConfig.adapter.importedMemberships).toEqual({'old-plan-id': 'new-plan-id', 'old-price-id': 'new-price-id', 'old-membership-id': 'new-membership-id'});
+        });
+
+        it('should preserve existing adapter properties when setting currentVersion', () => {
+            mockSessionStorage.getItem.mockReturnValue(null);
+            mockLocation.search = '';
+            testConfig.adapter = {
+                enabled: false,
+                forcedVersion: 'v2',
+                importedMemberships: { test: 'value' }
+            };
+
+            const result = shouldUseAdapter(testConfig);
+
+            expect(result).toBe('v2');
+            expect(testConfig.adapter.currentVersion).toBe('v2');
+            expect(testConfig.adapter.enabled).toBe(false);
+            expect(testConfig.adapter.forcedVersion).toBe('v2');
+            expect(testConfig.adapter.importedMemberships).toEqual({ test: 'value' });
         });
     });
 
@@ -165,9 +247,10 @@ describe('shouldUseAdapter', () => {
             mockSessionStorage.getItem.mockReturnValue(null);
             mockLocation.search = '?';
 
-            const result = shouldUseAdapter(mockConfig);
+            const result = shouldUseAdapter(testConfig);
 
             expect(result).toBe('v1');
+            expect(testConfig.adapter.currentVersion).toBe('v1');
             expect(mockSessionStorage.setItem).not.toHaveBeenCalled();
         });
 
@@ -175,20 +258,21 @@ describe('shouldUseAdapter', () => {
             mockSessionStorage.getItem.mockReturnValue(null);
             mockLocation.search = '?adapter';
 
-            const result = shouldUseAdapter(mockConfig);
+            const result = shouldUseAdapter(testConfig);
 
             expect(result).toBe('v1');
+            expect(testConfig.adapter.currentVersion).toBe('v1');
             expect(mockSessionStorage.setItem).not.toHaveBeenCalled();
         });
 
         it('should handle URL-encoded query parameters', () => {
             mockSessionStorage.getItem.mockReturnValue(null);
-            mockLocation.search = '?adapter=true&redirect=%2home';
+            mockLocation.search = '?adapter=true&redirect=%2Fhome';
 
-            shouldUseAdapter(mockConfig);
+            shouldUseAdapter(testConfig);
 
             expect(mockSessionStorage.setItem).toHaveBeenCalledWith(LOCAL_SESSION_NAME, 'true');
-            expect(mockHistory.replaceState).toHaveBeenCalledWith({}, '', '/test-path');
+            expect(mockHistory.replaceState).toHaveBeenCalledWith({}, '', '/test-path?redirect=%2Fhome');
         });
     });
 
@@ -198,19 +282,31 @@ describe('shouldUseAdapter', () => {
             mockSessionStorage.getItem.mockReturnValue(null);
             mockLocation.search = '?adapter=true';
 
-            const firstResult = shouldUseAdapter(mockConfig);
-            expect(firstResult).toBe('v1');
+            const firstResult = shouldUseAdapter(testConfig);
+            expect(firstResult).toBe('v2');
+            expect(testConfig.adapter.currentVersion).toBe('v2');
             expect(mockSessionStorage.setItem).toHaveBeenCalledWith(LOCAL_SESSION_NAME, 'true');
 
             // Reset mocks for the second call
             vi.clearAllMocks();
+            const secondConfig: AdapterConfig = {
+                adapter: {
+                    enabled: true,
+                    importedMemberships: {},
+                },
+                appIdV1: 'test-app-id-v1',
+                publicKey: 'test-public-key',
+                appId: 'test-app-id-v2',
+                debug: true
+            };
 
             // Second call - session exists, no query param
             mockSessionStorage.getItem.mockReturnValue('true');
             mockLocation.search = '';
 
-            const secondResult = shouldUseAdapter(mockConfig);
+            const secondResult = shouldUseAdapter(secondConfig);
             expect(secondResult).toBe('v2');
+            expect(secondConfig.adapter.currentVersion).toBe('v2');
             expect(mockSessionStorage.setItem).not.toHaveBeenCalled();
             expect(mockHistory.replaceState).not.toHaveBeenCalled();
         });
