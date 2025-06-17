@@ -13,7 +13,7 @@ export interface AdapterConfig extends DOMConfig {
 const defaultConfig: AdapterConfig = {
     adapter: {
         enabled: true,
-        currentVersion: "v1",
+        currentVersion: "v1", // readonly
         importedMemberships: import.meta.env.VITE_MEMBERSHIPS_MAP_TARGET ? JSON.parse(import.meta.env.VITE_MEMBERSHIPS_MAP_TARGET) : {},
     },
     appIdV1: import.meta.env.VITE_APP_ID_V1,

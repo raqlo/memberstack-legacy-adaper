@@ -11,17 +11,23 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "echo \"No tests specified\" && exit 0",
     "version:patch": "npm version patch --no-git-tag-version",
     "version:minor": "npm version minor --no-git-tag-version",
-    "version:major": "npm version major --no-git-tag-version"
+    "version:major": "npm version major --no-git-tag-version",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
+
   },
   "devDependencies": {
     "@memberstack/dom": "^1.9.40",
     "@types/node": "^22.14.1",
+    "@vitest/ui": "^3.2.3",
+    "jsdom": "^26.1.0",
     "terser": "^5.41.0",
     "typescript": "~5.8.3",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "vitest": "^3.2.3"
   },
   "dependencies": {
     "consola": "^3.4.2"
