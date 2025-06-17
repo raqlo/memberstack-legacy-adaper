@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { getPlanAttribute, replacePlanAttribute, updateAllPlanAttributes } from './replacePlanAttributes';
+import { getPlanAttribute, replacePlanAttribute, updateAllPlanAttributes } from '../../../../adapter/dom/replacePlanAttributes';
 
 describe('getPlanAttribute', () => {
     it('should return price attribute for price IDs', () => {
@@ -26,6 +26,7 @@ describe('replacePlanAttribute', () => {
         // Create a mock HTML element
         mockElement = document.createElement('div');
         mockElement.setAttribute('data-ms-plan', 'old_id');
+
     });
 
     it('should replace attribute for price plans', () => {
