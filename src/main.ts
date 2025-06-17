@@ -1,14 +1,18 @@
 import {shouldUseAdapter} from './loader/detect-ms-version';
 import {createLegacyProxy} from './adapter';
-import {logger} from './utils/logger.js';
+import {logger} from '@utils/logger';
 import {type AdapterConfig, config} from "./config";
-import {deleteV1Session} from "./utils/sessions";
-import {updateAllPlanAttributes} from "./adapter/dom/replacePlanAttributes";
+import {deleteV1Session} from "@utils/sessions";
+import {updateAllPlanAttributes} from "@dom/replacePlanAttributes";
+import {updateAllLogoutAttributes} from "@dom/replaceLogoutAttributes";
 
 async function enableLegacyAdapter() {
     // Dynamically load Memberstack 2.0 if not already present
+    document.addEventListener('DOMContentLoaded', () => {
+        updateAllPlanAttributes(config.adapter.importedMemberships);
+        updateAllLogoutAttributes();
+    })
     logger('trace', '[Adapter] starting legacy adapter...')
-    updateAllPlanAttributes(config.adapter.importedMemberships);
     try {
         if (!window.$memberstackDom) {
             await loadScript('https://static.memberstack.com/scripts/v1/memberstack.js', config);
@@ -82,7 +86,7 @@ function patchMemberStackOnReady() {
  */
 
 (async function () {
-    if(!config.adapter.enabled) {
+    if (!config.adapter.enabled) {
         logger('start', '[Adapter] Adapter disabled.');
         return;
     }

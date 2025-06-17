@@ -2,10 +2,10 @@
  * This adapts the 2.0 API ($memberstackDom) to look and behave like 1.0.
  * It handles data shape changes, promises normalization, etc.
  */
-import type {MemberstackDom} from "../types/globals";
-import type {onReadyPayload, v1GetMetaDataPayload} from "../types/v1-entities";
-import {getCurrentMemberV2, isMemberAuthV2} from "../utils/sessions";
-import {logger} from "../utils/logger";
+import type {MemberstackDom} from "@/types/globals";
+import type {onReadyPayload, v1GetMetaDataPayload} from "@/types/v1-entities";
+import {getCurrentMemberV2, isMemberAuthV2} from "@utils/sessions";
+import {logger} from "@utils/logger";
 import type { UpdateMemberJSONParams, UpdateMemberParams } from "@memberstack/dom";
 
 type BuildV2Bridge = {

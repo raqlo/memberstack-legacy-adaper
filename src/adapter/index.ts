@@ -1,6 +1,6 @@
-import type {MemberstackDom} from "../types/globals";
+import type {MemberstackDom} from "@/types/globals";
 import {createV1API} from "./v1-api";
-import {logger} from "../utils/logger";
+import {logger} from "@utils/logger";
 
 export function createLegacyProxy($memberstackDomInstance: MemberstackDom) {
     const v1Api = createV1API($memberstackDomInstance); // your custom bridge

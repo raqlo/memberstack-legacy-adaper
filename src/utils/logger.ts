@@ -1,4 +1,4 @@
-import {config} from '../config.js';
+import {config} from '@/config';
 import {consola} from "consola/browser";
 import type {LogType} from "consola/browser";
 

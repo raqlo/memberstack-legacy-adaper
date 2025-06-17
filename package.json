@@ -1,7 +1,7 @@
 {
   "name": "ms-legacy-adapter",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": {
     "name": "Raquel Lopez",
     "email": "raquelcle@gmail.com"
@@ -20,13 +20,13 @@
   },
   "devDependencies": {
     "@memberstack/dom": "^1.9.40",
-    "@types/node": "^22.14.1",
-    "@vitest/ui": "^3.2.3",
+    "@types/node": "^24.0.3",
+    "@vitest/ui": "^3.2.4",
     "jsdom": "^26.1.0",
-    "terser": "^5.41.0",
+    "terser": "^5.43.0",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
-    "vitest": "^3.2.3"
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "consola": "^3.4.2"
