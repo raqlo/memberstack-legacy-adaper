@@ -45,7 +45,7 @@ export function updateAllLogoutAttributes() {
     // Handle ms-logout attributes (without data- prefix)
     const logoutElements = document.querySelectorAll("[ms-logout]");
     if (logoutElements.length > 0) {
-        logger('warn',`Found ${dataLogoutElements.length} elements with deprecated ms-logout attribute`)
+        logger('warn',`Found ${logoutElements.length} elements with deprecated ms-logout attribute`)
         logoutElements.forEach(el => {
             replaceLogoutAttribute(el as HTMLElement);
         });

@@ -101,7 +101,7 @@ function patchMemberStackOnReady() {
         patchMemberStackOnReady();
         await enableLegacyAdapter();
     } else {
-        logger('start', '[Adapter] Adapter not enabled — using native Memberstack 1.0.');
+        logger('start', '[Adapter] Adapter not enabled — using v1.');
         await loadScript('https://api.memberstack.io/static/memberstack.js?webflow', config);
     }
 })()

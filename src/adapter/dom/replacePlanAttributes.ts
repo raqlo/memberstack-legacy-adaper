@@ -99,7 +99,7 @@ export function replaceSignupHref(
 }
 
 export function updateAllPlanAttributes(importedMemberships: Record<string, string>) {
-    logger('info', '[Adapter] Starting plan attributes update process');
+    logger('trace', '[Adapter] Starting plan attributes update process');
 
     const membershipCount = Object.keys(importedMemberships).length;
     logger('warn', `[Adapter] Working with ${membershipCount} imported memberships`);
@@ -133,7 +133,7 @@ export function updateAllPlanAttributes(importedMemberships: Record<string, stri
 
     // Handle signup href attributes
     const signupElements = document.querySelectorAll('a[href^="#/ms/signup/"]');
-    if(signupElements.length) {
+    if(signupElements.length > 0) {
         logger('warn', `[Adapter] Found ${signupElements.length} elements with signup href attributes`);
 
         signupElements.forEach(el => {
@@ -181,7 +181,7 @@ function getNestedProperty(obj: v2PlanItem, path: string): string {
 }
 
 export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, memberData: v2CurrentMember) {
-    logger('debug', `[Adapter] Replacing member attribute for property: ${propertyPath}`);
+    logger('trace', `[Adapter] Replacing member attribute for property: ${propertyPath}`);
 
     // Only handle membership-related attributes
     if (!propertyPath.startsWith('membership.')) {
@@ -205,7 +205,7 @@ export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, me
 }
 
 export function updateAllMemberAttributes() {
-    logger('info', '[Adapter] Starting member attributes update process');
+    logger('trace', '[Adapter] Starting member attributes update process');
 
     if (!isMemberAuthV2()) {
         logger('debug', '[Adapter] Member not authenticated with v2, skipping member attributes update');

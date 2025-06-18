@@ -64,11 +64,12 @@ describe('updateRewriteAttributes', () => {
         document.body.innerHTML = `
             <span data-ms-rewrite="Welcome back!">Default text</span>
         `;
+        const element = document.querySelector('[data-ms-rewrite]') as HTMLElement;
 
         updateRewriteAttributes();
 
-        // Should not call warn about rewrite attributes since processing was skipped
-        expect(logger).not.toHaveBeenCalledWith('warn', expect.stringContaining('elements with data-ms-rewrite attribute'));
+        expect(element.textContent).toBe('Default text');
+        expect(logger).toHaveBeenCalledWith('warn', expect.stringContaining('elements with data-ms-rewrite attribute'));
         expect(logger).toHaveBeenCalledWith('debug', expect.stringContaining('Member not authenticated'));
     });
 

@@ -4,17 +4,16 @@ import {isMemberAuthV2} from "@utils/sessions";
 export function updateRewriteAttributes() {
     logger('info', '[Adapter] Starting rewrite attributes update process');
 
-    // Check if member is authenticated
-    if (!isMemberAuthV2()) {
-        logger('debug', '[Adapter] Member not authenticated, skipping rewrite attributes update');
-        return;
-    }
-
     // Find all elements with data-ms-rewrite attribute
     const rewriteElements = document.querySelectorAll("[data-ms-rewrite]");
 
     if (rewriteElements.length) {
         logger('warn', `[Adapter] Found ${rewriteElements.length} elements with data-ms-rewrite attribute`);
+        // Check if member is authenticated
+        if (!isMemberAuthV2()) {
+            logger('debug', '[Adapter] Member not authenticated, skipping rewrite attributes update');
+            return;
+        }
 
         rewriteElements.forEach(el => {
             const rewriteValue = el.getAttribute("data-ms-rewrite");

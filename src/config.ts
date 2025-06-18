@@ -10,6 +10,7 @@ export interface AdapterConfig extends DOMConfig {
     }
     appIdV1: string;
     debug: boolean;
+    logLevel?: 'silent' | 'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace' | 'verbose';
 }
 
 const defaultConfig: AdapterConfig = {
@@ -17,11 +18,13 @@ const defaultConfig: AdapterConfig = {
         enabled: true,
         importedMemberships: import.meta.env.VITE_MEMBERSHIPS_MAP_TARGET ? JSON.parse(import.meta.env.VITE_MEMBERSHIPS_MAP_TARGET) : {},
         loginUrl: import.meta.env.VITE_LOGIN_URL,
+        forcedVersion: 'v2'
     },
     appIdV1: import.meta.env.VITE_APP_ID_V1,
     publicKey: import.meta.env.VITE_PUBLIC_KEY_V2,
     appId: import.meta.env.VITE_APP_ID_V2,
-    debug: true
+    debug: true,
+    logLevel: 'warn',
 };
 
 // Utility function to merge configurations
