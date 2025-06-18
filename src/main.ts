@@ -5,6 +5,7 @@ import {type AdapterConfig, config} from "./config";
 import {deleteV1Session} from "@utils/sessions";
 import {updateAllMemberAttributes, updateAllPlanAttributes} from "@dom/replacePlanAttributes";
 import {updateAllLogoutAttributes} from "@dom/replaceAuthAttributes";
+import {updateLoginUrlsToProfile, updateRewriteAttributes} from "@dom/replaceMemberAttributes";
 
 async function enableLegacyAdapter() {
     // Dynamically load Memberstack 2.0 if not already present
@@ -24,7 +25,10 @@ async function enableLegacyAdapter() {
         }
 
         window.MemberStack = createLegacyProxy(msDom);
-        updateAllMemberAttributes()
+        updateAllMemberAttributes();
+        updateRewriteAttributes();
+        updateLoginUrlsToProfile(config.adapter.loginUrl);
+
 
         logger('trace', '[Adapter] 2.0 adapter enabled and injected.');
     } catch (e) {
@@ -97,7 +101,7 @@ function patchMemberStackOnReady() {
         patchMemberStackOnReady();
         await enableLegacyAdapter();
     } else {
-        logger('start', '[Adapter] Adapter not enabled — using native Memberstack 1.0.');
+        logger('start', '[Adapter] Adapter not enabled — using v1.');
         await loadScript('https://api.memberstack.io/static/memberstack.js?webflow', config);
     }
 })()

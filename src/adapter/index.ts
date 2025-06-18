@@ -9,13 +9,13 @@ export function createLegacyProxy($memberstackDomInstance: MemberstackDom) {
 
     return new Proxy(window.MemberStack, {
         get(_, key) {
-            logger('trace', `[Adapter] Proxying "${String(key)}" method...`)
+            logger('warn', `[Adapter] Proxying "${String(key)}" method...`)
             if (key in v1Api) {
                 // @ts-ignore @ts-expect-error ToDo create v1 lib type and type this declaration type Key = keyof typeof wrapped;
                 return v1Api[key];
             }
 
-            logger('warn',`[Adapter] Method "${String(key)}" not found in adapter.`);
+            logger('error',`[Adapter] Method "${String(key)}" not found in adapter.`);
             return undefined;
         }
     });
