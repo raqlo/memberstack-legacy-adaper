@@ -1,4 +1,7 @@
 import {logger} from "@utils/logger";
+import {getCurrentMemberV2, isMemberAuthV2} from "@utils/sessions";
+import type {v2CurrentMember, v2PlanItem} from "@/types/v2-entities";
+
 
 export function getPlanAttribute(id: string): string | null {
     if (id.startsWith("prc_")) return "data-ms-plan:price";
@@ -105,3 +108,51 @@ export function updateAllPlanAttributes(importedMemberships: Record<string, stri
         }
     });
 }
+
+function getNestedProperty(obj: v2PlanItem, path: string): string {
+    if (!obj) {
+        return "";
+    }
+    debugger;
+    if (path === "membership.name") return obj.planId // name doesn't exist in v2
+    if (path === "membership.amount") return String(obj.payment?.amount) || '0'
+    if (path === "membership.status") return obj.status
+    return ''
+}
+
+export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, memberData: v2CurrentMember) {
+    // Only handle membership-related attributes
+    if (!propertyPath.startsWith('membership.')) {
+        return; // Let Memberstack handle non-membership attributes
+    }
+
+    const value = getNestedProperty(memberData.planConnections[0], propertyPath);
+    debugger;
+    if (value) {
+        el.textContent = value;
+        logger('trace', `[Adapter] Set member property "${propertyPath}" to "${value}" on element`);
+    } else {
+        logger('warn', `[Adapter] Empty value for member property "${propertyPath}"`);
+    }
+}
+
+
+export function updateAllMemberAttributes() {
+    if (!isMemberAuthV2()) {
+        return;
+    }
+    const memberData = getCurrentMemberV2()
+    if (!memberData) {
+        logger('error', '[Adapter] Failed to fetch member data');
+        return;
+    }
+
+    // Handle only membership-related data-ms-member attributes
+    document.querySelectorAll("[data-ms-member^='membership.']").forEach(el => {
+        const propertyPath = el.getAttribute("data-ms-member");
+        if (propertyPath) {
+            replaceMemberAttribute(el as HTMLElement, propertyPath, memberData);
+        }
+    });
+}
+
