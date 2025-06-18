@@ -1,11 +1,17 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {replaceLogoutAttribute, updateAllLogoutAttributes} from "@dom/replaceAuthAttributes";
+import { logger } from '@utils/logger';
+
+vi.mock('@utils/logger', () => ({
+    logger: vi.fn()
+}));
 
 describe('replaceLogoutAttribute', () => {
     let mockElement: HTMLElement;
 
     beforeEach(() => {
         mockElement = document.createElement('div');
+        vi.clearAllMocks();
     });
 
     it('should replace data-ms-logout with data-ms-action="logout"', () => {
@@ -47,6 +53,7 @@ describe('replaceLogoutAttribute', () => {
 describe('updateAllLogoutAttributes', () => {
     beforeEach(() => {
         document.body.innerHTML = '';
+        vi.clearAllMocks();
     });
 
     it('should update all elements with data-ms-logout attribute', () => {
@@ -120,5 +127,31 @@ describe('updateAllLogoutAttributes', () => {
         const button = document.querySelector('button');
         expect(button?.getAttribute('data-ms-action')).toBe('logout');
         expect(button?.hasAttribute('data-ms-logout')).toBe(false);
+    });
+
+    it('should call warn when deprecated attributes are found', () => {
+        document.body.innerHTML = `
+            <button data-ms-logout>Logout Button</button>
+            <a ms-logout href="#">Logout Link</a>
+            <span ms-forgot>Forgot</span>
+            <div ms-login>Login</div>
+        `;
+
+        updateAllLogoutAttributes();
+
+        // Check that warn was called (we don't care about the message content)
+        expect(logger).toHaveBeenCalledWith('warn', expect.any(String));
+    });
+
+    it('should not call warn when no deprecated attributes exist', () => {
+        document.body.innerHTML = `
+            <button>Regular Button</button>
+            <a href="#">Regular Link</a>
+        `;
+
+        updateAllLogoutAttributes();
+
+        // Check that warn was never called
+        expect(logger).not.toHaveBeenCalledWith('warn', expect.any(String));
     });
 });
