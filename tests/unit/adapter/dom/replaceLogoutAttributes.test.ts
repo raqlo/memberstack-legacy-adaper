@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import {replaceLogoutAttribute, updateAllLogoutAttributes} from "@dom/replaceLogoutAttributes";
+import {replaceLogoutAttribute, updateAllLogoutAttributes} from "@dom/replaceAuthAttributes";
 
 describe('replaceLogoutAttribute', () => {
     let mockElement: HTMLElement;
