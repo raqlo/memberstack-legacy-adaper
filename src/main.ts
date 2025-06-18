@@ -3,8 +3,8 @@ import {createLegacyProxy} from './adapter';
 import {logger} from '@utils/logger';
 import {type AdapterConfig, config} from "./config";
 import {deleteV1Session} from "@utils/sessions";
-import {updateAllPlanAttributes} from "@dom/replacePlanAttributes";
-import {updateAllLogoutAttributes} from "@dom/replaceLogoutAttributes";
+import {updateAllMemberAttributes, updateAllPlanAttributes} from "@dom/replacePlanAttributes";
+import {updateAllLogoutAttributes} from "@dom/replaceAuthAttributes";
 
 async function enableLegacyAdapter() {
     // Dynamically load Memberstack 2.0 if not already present
@@ -24,6 +24,7 @@ async function enableLegacyAdapter() {
         }
 
         window.MemberStack = createLegacyProxy(msDom);
+        updateAllMemberAttributes()
 
         logger('trace', '[Adapter] 2.0 adapter enabled and injected.');
     } catch (e) {
