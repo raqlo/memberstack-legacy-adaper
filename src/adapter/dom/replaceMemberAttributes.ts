@@ -32,3 +32,36 @@ export function updateRewriteAttributes() {
         logger('debug', '[Adapter] No elements with data-ms-rewrite attribute found');
     }
 }
+
+
+export function updateLoginUrlsToProfile(loginUrl?: string) {
+    if (!loginUrl) {
+        logger('debug', '[Adapter] No login URL provided, skipping login URL to profile update');
+        return;
+    }
+
+    logger('info', '[Adapter] Starting login URL to profile update process');
+
+    // Check if member is authenticated
+    if (!isMemberAuthV2()) {
+        logger('debug', '[Adapter] Member not authenticated, skipping login URL updates');
+        return;
+    }
+
+    // Find all elements with href matching the login URL
+    const loginElements = document.querySelectorAll(`a[href="${loginUrl}"]`);
+
+    if (loginElements.length) {
+        logger('warn', `[Adapter] Found ${loginElements.length} elements with login URL that need profile URL update`);
+
+        loginElements.forEach(el => {
+            const linkElement = el as HTMLAnchorElement;
+            linkElement.href = '/profile-page';
+            logger('debug', `[Adapter] Updated login URL to profile URL for ${linkElement.tagName} element`);
+        });
+
+        logger('info', `[Adapter] Login URL to profile update completed. Updated ${loginElements.length} elements`);
+    } else {
+        logger('debug', `[Adapter] No elements with login URL "${loginUrl}" found`);
+    }
+}
