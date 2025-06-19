@@ -1,3 +1,20 @@
+/**
+ * @fileoverview Handles transformation of deprecated modal attributes to v2 format.
+ * Converts old ms-* attributes (logout, login, signup, forgot) to new data-ms-* equivalents.
+ *
+ * @example
+ * // Before: <button ms-logout>Logout</button>
+ * // After:  <button data-ms-action="logout">Logout</button>
+ *
+ * @example
+ * // Before: <a ms-login>Login</a>
+ * // After:  <a data-ms-modal="login">Login</a>
+ *
+ * @example
+ * // Before: <span ms-forgot>Reset Password</span>
+ * // After:  <span data-ms-modal="forgot-password">Reset Password</span>
+ */
+
 import {logger} from "@utils/logger";
 
 export function replaceLogoutAttribute(el: HTMLElement) {
@@ -66,6 +83,14 @@ export function updateAllLogoutAttributes() {
         logger('warn',`Found ${loginElements.length} elements with deprecated ms-login attribute`);
         loginElements.forEach(el => {
             replaceLoginAttribute(el as HTMLElement);
+        });
+    }
+
+    const signupElements = document.querySelectorAll("[ms-signup]");
+    if (signupElements.length > 0) {
+        logger('warn', `Found ${signupElements.length} elements with deprecated ms-signup attribute`);
+        signupElements.forEach(el => {
+            replaceSignupAttribute(el as HTMLElement);
         });
     }
 
