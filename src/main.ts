@@ -3,15 +3,19 @@ import {createLegacyProxy} from './adapter';
 import {logger} from '@utils/logger';
 import {type AdapterConfig, config} from "./config";
 import {deleteV1Session} from "@utils/sessions";
-import {updateAllMemberAttributes, updateAllPlanAttributes} from "@dom/replacePlanAttributes";
-import {updateAllLogoutAttributes} from "@dom/replaceAuthAttributes";
-import {updateLoginUrlsToProfile, updateRewriteAttributes} from "@dom/replaceMemberAttributes";
+import { updateAllPlanAttributes} from "@dom/replacePlanAttributes";
+import {updateAllLogoutAttributes} from "@dom/replaceUtilityAuthAttributes";
+import {
+    updateAllMemberUpdates
+} from "@dom/replaceMemberAttributes";
+import {handleSignupPageForms} from "@dom/replaceFormAttributes";
 
 async function enableLegacyAdapter() {
-    // Dynamically load Memberstack 2.0 if not already present
+    // exec before memberstack loads
     document.addEventListener('DOMContentLoaded', () => {
         updateAllPlanAttributes(config.adapter.importedMemberships);
         updateAllLogoutAttributes();
+        handleSignupPageForms()
     })
     logger('trace', '[Adapter] starting legacy adapter...')
     try {
@@ -25,10 +29,8 @@ async function enableLegacyAdapter() {
         }
 
         window.MemberStack = createLegacyProxy(msDom);
-        updateAllMemberAttributes();
-        updateRewriteAttributes();
-        updateLoginUrlsToProfile(config.adapter.loginUrl);
-
+        // exec after memberstack loads
+        updateAllMemberUpdates()
 
         logger('trace', '[Adapter] 2.0 adapter enabled and injected.');
     } catch (e) {
