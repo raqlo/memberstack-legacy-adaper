@@ -48,7 +48,7 @@ export function replaceSignupAttribute(el: HTMLElement) {
 }
 
 export function updateAllLogoutAttributes() {
-    logger('info', 'Starting attribute update process')
+    logger('debug', 'Starting attribute update process')
 
     // Handle data-ms-logout attributes
     const dataLogoutElements = document.querySelectorAll("[data-ms-logout]");
@@ -95,5 +95,5 @@ export function updateAllLogoutAttributes() {
     }
 
     const totalUpdated = dataLogoutElements.length + logoutElements.length + forgotElements.length + loginElements.length;
-    logger('info',`Attribute update completed. Updated ${totalUpdated} elements total`);
+    logger('debug',`Attribute update completed. Updated ${totalUpdated} elements total`);
 }

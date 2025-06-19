@@ -43,7 +43,7 @@ export function handleSignupPageUrls(): number {
             }
         });
 
-        logger('info', `[Adapter] Logged ${pageUrlElements.length} signup page URLs for processing on destination page`);
+        logger('debug', `[Adapter] Logged ${pageUrlElements.length} signup page URLs for processing on destination page`);
     }
 
     return pageUrlElements.length;
