@@ -16,7 +16,7 @@ import {logger} from "@utils/logger";
 import {isMemberAuthV2} from "@utils/sessions";
 
 export function updateRewriteAttributes(): number {
-    logger('info', '[Adapter] Starting rewrite attributes update process');
+    logger('debug', '[Adapter] Starting rewrite attributes update process');
 
     // Find all elements with data-ms-rewrite attribute
     const rewriteElements = document.querySelectorAll("[data-ms-rewrite]");

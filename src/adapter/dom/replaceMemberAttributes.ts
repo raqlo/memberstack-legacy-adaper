@@ -24,5 +24,5 @@ export function updateAllMemberUpdates(loginUrl?: string) {
     const memberDataCount = updateAllMemberAttributes();
 
     const totalUpdated = rewriteCount + urlCount + memberDataCount;
-    logger('info', `[Adapter] All member updates completed. Updated ${totalUpdated} elements total`);
+    logger('debug', `[Adapter] All member updates completed. Updated ${totalUpdated} elements total`);
 }
