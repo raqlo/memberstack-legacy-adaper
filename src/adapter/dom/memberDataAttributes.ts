@@ -82,18 +82,20 @@ export function updateAllMemberAttributes(): number {
 
     logger('debug', `[Adapter] Retrieved member data for member ID: ${memberData.id}`);
 
+    let updatedCount = 0;
     // Handle only membership-related data-ms-member attributes
     const memberElements = document.querySelectorAll("[data-ms-member^='membership.']");
-    logger('warn', `[Adapter] Found ${memberElements.length} elements with membership-related data-ms-member attributes`);
+   if(memberElements.length) {
+       logger('warn', `[Adapter] Found ${memberElements.length} elements with membership-related data-ms-member attributes`);
 
-    let updatedCount = 0;
-    memberElements.forEach(el => {
-        const propertyPath = el.getAttribute("data-ms-member");
-        if (propertyPath) {
-            const success = replaceMemberAttribute(el as HTMLElement, propertyPath, memberData);
-            if (success) updatedCount++;
-        }
-    });
+       memberElements.forEach(el => {
+           const propertyPath = el.getAttribute("data-ms-member");
+           if (propertyPath) {
+               const success = replaceMemberAttribute(el as HTMLElement, propertyPath, memberData);
+               if (success) updatedCount++;
+           }
+       });
+   }
 
     logger('info', `[Adapter] Member attributes update completed. Processed ${updatedCount} elements`);
     return updatedCount;
