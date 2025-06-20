@@ -9,13 +9,17 @@ import {
     updateAllMemberUpdates
 } from "@dom/replaceMemberAttributes";
 import {handleSignupPageForms} from "@dom/replaceFormAttributes";
+import {processContentUrls} from "@dom/hashUrlToMsContentTransformator";
+import {processPasswordResetUrls} from "@dom/hashUrlToForgotPasswordModal";
 
 async function enableLegacyAdapter() {
     // exec before memberstack loads
     document.addEventListener('DOMContentLoaded', () => {
         updateAllPlanAttributes(config.adapter.importedMemberships);
         updateAllLogoutAttributes();
-        handleSignupPageForms()
+        handleSignupPageForms();
+        processContentUrls();
+        processPasswordResetUrls()
     })
     logger('trace', '[Adapter] starting legacy adapter...')
     try {

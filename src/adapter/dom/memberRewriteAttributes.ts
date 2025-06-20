@@ -19,7 +19,7 @@ export function updateRewriteAttributes(): number {
     logger('debug', '[Adapter] Starting rewrite attributes update process');
 
     // Find all elements with data-ms-rewrite attribute
-    const rewriteElements = document.querySelectorAll("[data-ms-rewrite]");
+    const rewriteElements = document.querySelectorAll("[data-ms-rewrite], [ms-rewrite]");
 
     if (rewriteElements.length === 0) {
         logger('debug', '[Adapter] No elements with data-ms-rewrite attribute found');
@@ -36,7 +36,7 @@ export function updateRewriteAttributes(): number {
 
     let updatedCount = 0;
     rewriteElements.forEach(el => {
-        const rewriteValue = el.getAttribute("data-ms-rewrite");
+        const rewriteValue = el.getAttribute("data-ms-rewrite") || el.getAttribute("ms-rewrite");
         if (rewriteValue) {
             // Replace the element's content with the rewrite value
             el.textContent = rewriteValue;
