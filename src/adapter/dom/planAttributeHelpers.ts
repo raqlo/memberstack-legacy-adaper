@@ -19,7 +19,7 @@ export function getPlanAttribute(id: string): string | null {
 
     if (id.startsWith("prc_")) {
         logger('debug', `[Adapter] ID "${id}" is a price ID, returning data-ms-price:update`);
-        return "data-ms-price:upgrade";
+        return "data-ms-price:update";
     }
     if (id.startsWith("pln_")) {
         logger('debug', `[Adapter] ID "${id}" is a plan ID, returning data-ms-plan:add`);
