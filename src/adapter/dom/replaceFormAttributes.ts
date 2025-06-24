@@ -1,4 +1,5 @@
 /**
+ * @deprecated
  * @fileoverview Handles signup forms on destination pages that were reached via hash URLs.
  * Extracts plan IDs from URL hash fragments and applies them to signup forms on the current page.
  *
@@ -43,7 +44,7 @@ export function handleSignupPageForms() {
     logger('debug', `[Adapter] Extracted plan ID from URL: ${extractedId}`);
 
     // Get new ID from config
-    const newId = config.adapter.importedMemberships?.[extractedId];
+    const newId = config.adapter.importedMemberships.find(id => id.newId === extractedId)?.newId;
     if (!newId) {
         logger('error', `[Adapter] Extracted Plan ID from URL "${extractedId}" not found in config.importedMemberships`);
         return;

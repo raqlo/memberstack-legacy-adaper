@@ -1,10 +1,12 @@
 import type {DOMConfig} from "@memberstack/dom/lib/methods/index";
 
+
+export type MembershipsMap = {name: string, oldId: string, newId: string}
 export interface AdapterConfig extends DOMConfig {
     adapter: {
         enabled: boolean;
         currentVersion?: "v1" | "v2"; // readonly
-        importedMemberships: Record<string, string>;
+        importedMemberships: MembershipsMap[];
         forcedVersion?: "v1" | "v2";
         loginUrl?: string;
     }

@@ -15,13 +15,17 @@ import {logger} from "@utils/logger";
 import {updateRewriteAttributes} from "./memberRewriteAttributes";
 import {updateLoginUrlsToProfile} from "./memberUrlUpdates";
 import {updateAllMemberAttributes} from "./memberDataAttributes";
+import type {MembershipsMap} from "@/config";
 
-export function updateAllMemberUpdates(loginUrl?: string) {
+export function updateAllMemberUpdates({loginUrl, importMemberships}: {
+    loginUrl?: string,
+    importMemberships: MembershipsMap[]
+}) {
     logger('trace', '[Adapter] Starting all member updates process');
 
     const rewriteCount = updateRewriteAttributes();
     const urlCount = updateLoginUrlsToProfile(loginUrl);
-    const memberDataCount = updateAllMemberAttributes();
+    const memberDataCount = updateAllMemberAttributes(importMemberships);
 
     const totalUpdated = rewriteCount + urlCount + memberDataCount;
     logger('debug', `[Adapter] All member updates completed. Updated ${totalUpdated} elements total`);

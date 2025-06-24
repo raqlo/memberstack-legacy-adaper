@@ -1,4 +1,3 @@
-
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
     getPlanAttribute,
@@ -73,7 +72,7 @@ describe('planAttributeHelpers', () => {
     describe('replaceDataMsPlanAttribute', () => {
         it('should successfully replace plan attribute with price ID', () => {
             const element = mockElement('button');
-            const importedMemberships = { 'mem_old123': 'prc_new456' };
+            const importedMemberships = [{ name: 'free', oldId: 'mem_old123', newId: 'prc_new456' }];
 
             replaceDataMsPlanAttribute(element, 'mem_old123', importedMemberships);
 
@@ -83,7 +82,7 @@ describe('planAttributeHelpers', () => {
 
         it('should successfully replace plan attribute with plan ID', () => {
             const element = mockElement('button');
-            const importedMemberships = { 'mem_old123': 'pln_new456' };
+            const importedMemberships = [{ name: 'premium', oldId: 'mem_old123', newId: 'pln_new456' }];
 
             replaceDataMsPlanAttribute(element, 'mem_old123', importedMemberships);
 
@@ -93,7 +92,7 @@ describe('planAttributeHelpers', () => {
 
         it('should handle missing old ID in mapping', () => {
             const element = mockElement('button');
-            const importedMemberships = { 'mem_other': 'prc_new456' };
+            const importedMemberships = [{ name: 'basic', oldId: 'mem_other', newId: 'prc_new456' }];
 
             replaceDataMsPlanAttribute(element, 'mem_old123', importedMemberships);
 
@@ -103,7 +102,7 @@ describe('planAttributeHelpers', () => {
 
         it('should handle invalid new ID format', () => {
             const element = mockElement('button');
-            const importedMemberships = { 'mem_old123': 'invalid_new456' };
+            const importedMemberships = [{ name: 'invalid', oldId: 'mem_old123', newId: 'invalid_new456' }];
 
             replaceDataMsPlanAttribute(element, 'mem_old123', importedMemberships);
 
@@ -115,7 +114,7 @@ describe('planAttributeHelpers', () => {
     describe('replaceDataMsMembershipAttribute', () => {
         it('should successfully replace membership attribute', () => {
             const element = mockElement('div');
-            const importedMemberships = { 'mem_old123': 'prc_new456' };
+            const importedMemberships = [{ name: 'starter', oldId: 'mem_old123', newId: 'prc_new456' }];
 
             replaceDataMsMembershipAttribute(element, 'mem_old123', importedMemberships);
 
@@ -125,7 +124,7 @@ describe('planAttributeHelpers', () => {
 
         it('should add modal attribute to anchor tags with href="#"', () => {
             const element = mockElement('a', { href: '#' });
-            const importedMemberships = { 'mem_old123': 'pln_new456' };
+            const importedMemberships = [{ name: 'pro', oldId: 'mem_old123', newId: 'pln_new456' }];
 
             replaceDataMsMembershipAttribute(element, 'mem_old123', importedMemberships);
 
@@ -136,7 +135,7 @@ describe('planAttributeHelpers', () => {
 
         it('should not add modal attribute to anchor tags without href="#"', () => {
             const element = mockElement('a', { href: '/signup' });
-            const importedMemberships = { 'mem_old123': 'pln_new456' };
+            const importedMemberships = [{ name: 'enterprise', oldId: 'mem_old123', newId: 'pln_new456' }];
 
             replaceDataMsMembershipAttribute(element, 'mem_old123', importedMemberships);
 
@@ -146,7 +145,7 @@ describe('planAttributeHelpers', () => {
 
         it('should not add modal attribute to non-anchor elements', () => {
             const element = mockElement('button');
-            const importedMemberships = { 'mem_old123': 'pln_new456' };
+            const importedMemberships = [{ name: 'basic', oldId: 'mem_old123', newId: 'pln_new456' }];
 
             replaceDataMsMembershipAttribute(element, 'mem_old123', importedMemberships);
 
@@ -156,7 +155,7 @@ describe('planAttributeHelpers', () => {
 
         it('should handle case-insensitive tag names', () => {
             const element = mockElement('A', { href: '#' });
-            const importedMemberships = { 'mem_old123': 'pln_new456' };
+            const importedMemberships = [{ name: 'premium', oldId: 'mem_old123', newId: 'pln_new456' }];
 
             replaceDataMsMembershipAttribute(element, 'mem_old123', importedMemberships);
 
@@ -173,10 +172,10 @@ describe('planAttributeHelpers', () => {
                 <span>No attribute</span>
             `;
 
-            const importedMemberships = {
-                'mem_old1': 'prc_new1',
-                'mem_old2': 'pln_new2'
-            };
+            const importedMemberships = [
+                { name: 'starter', oldId: 'mem_old1', newId: 'prc_new1' },
+                { name: 'pro', oldId: 'mem_old2', newId: 'pln_new2' }
+            ];
 
             const result = processDataMsPlanAttributes(importedMemberships);
 
@@ -193,7 +192,7 @@ describe('planAttributeHelpers', () => {
         it('should return 0 when no elements found', () => {
             document.body.innerHTML = '<div>No plan attributes</div>';
 
-            const result = processDataMsPlanAttributes({});
+            const result = processDataMsPlanAttributes([]);
 
             expect(result).toBe(0);
         });
@@ -201,7 +200,7 @@ describe('planAttributeHelpers', () => {
         it('should handle elements with empty data-ms-plan attributes', () => {
             document.body.innerHTML = '<button data-ms-plan="">Empty</button>';
 
-            const result = processDataMsPlanAttributes({ '': 'prc_123' });
+            const result = processDataMsPlanAttributes([{ name: 'empty', oldId: '', newId: 'prc_123' }]);
 
             expect(result).toBe(1);
         });
@@ -216,10 +215,10 @@ describe('planAttributeHelpers', () => {
                 <div>No attribute</div>
             `;
 
-            const importedMemberships = {
-                'mem_old1': 'pln_new1',
-                'mem_old2': 'prc_new2'
-            };
+            const importedMemberships = [
+                { name: 'basic', oldId: 'mem_old1', newId: 'pln_new1' },
+                { name: 'premium', oldId: 'mem_old2', newId: 'prc_new2' }
+            ];
 
             const result = processDataMsMembershipAttributes(importedMemberships);
 
@@ -237,7 +236,7 @@ describe('planAttributeHelpers', () => {
         it('should return 0 when no elements found', () => {
             document.body.innerHTML = '<div>No membership attributes</div>';
 
-            const result = processDataMsMembershipAttributes({});
+            const result = processDataMsMembershipAttributes([]);
 
             expect(result).toBe(0);
         });
@@ -249,11 +248,11 @@ describe('planAttributeHelpers', () => {
                 <a href="/page" data-ms-membership="mem_valid2">No modal</a>
             `;
 
-            const importedMemberships = {
-                'mem_valid': 'pln_new1',
-                'mem_valid2': 'prc_new2'
+            const importedMemberships = [
+                { name: 'valid', oldId: 'mem_valid', newId: 'pln_new1' },
+                { name: 'valid2', oldId: 'mem_valid2', newId: 'prc_new2' }
                 // mem_invalid not in mapping
-            };
+            ];
 
             const result = processDataMsMembershipAttributes(importedMemberships);
 
@@ -269,11 +268,11 @@ describe('planAttributeHelpers', () => {
                 <div data-ms-plan="mem_plan2">Another Plan</div>
             `;
 
-            const importedMemberships = {
-                'mem_plan1': 'prc_price1',
-                'mem_membership1': 'pln_plan1',
-                'mem_plan2': 'pln_plan2'
-            };
+            const importedMemberships = [
+                { name: 'plan1', oldId: 'mem_plan1', newId: 'prc_price1' },
+                { name: 'membership1', oldId: 'mem_membership1', newId: 'pln_plan1' },
+                { name: 'plan2', oldId: 'mem_plan2', newId: 'pln_plan2' }
+            ];
 
             const planResult = processDataMsPlanAttributes(importedMemberships);
             const membershipResult = processDataMsMembershipAttributes(importedMemberships);

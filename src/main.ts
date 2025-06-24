@@ -3,23 +3,24 @@ import {createLegacyProxy} from './adapter';
 import {logger} from '@utils/logger';
 import {type AdapterConfig, config} from "./config";
 import {deleteV1Session} from "@utils/sessions";
-import { updateAllPlanAttributes} from "@dom/replacePlanAttributes";
+import {updateAllPlanAttributes} from "@dom/replacePlanAttributes";
 import {updateAllLogoutAttributes} from "@dom/replaceUtilityAuthAttributes";
 import {
     updateAllMemberUpdates
 } from "@dom/replaceMemberAttributes";
-import {handleSignupPageForms} from "@dom/replaceFormAttributes";
-import {processContentUrls} from "@dom/hashUrlToMsContentTransformator";
 import {processPasswordResetUrls} from "@dom/hashUrlToForgotPasswordModal";
+import {processRelativeUrlWithHashUrls} from "@dom/relativeUrlWithHashToPlanAttribute";
+import {processContentUrls} from "@dom/hashUrlToMsContentTransformator";
+import {hideLoginModalOnAuth} from "@dom/hideElemsOnAuth";
 
 async function enableLegacyAdapter() {
     // exec before memberstack loads
     document.addEventListener('DOMContentLoaded', () => {
         updateAllPlanAttributes(config.adapter.importedMemberships);
+        processRelativeUrlWithHashUrls(config.adapter.importedMemberships)
         updateAllLogoutAttributes();
-        handleSignupPageForms();
-        processContentUrls();
-        processPasswordResetUrls()
+        processPasswordResetUrls();
+        processContentUrls()
     })
     logger('trace', '[Adapter] starting legacy adapter...')
     try {
@@ -34,8 +35,11 @@ async function enableLegacyAdapter() {
 
         window.MemberStack = createLegacyProxy(msDom);
         // exec after memberstack loads
-        updateAllMemberUpdates()
-
+        updateAllMemberUpdates({
+            importMemberships: config.adapter.importedMemberships,
+            loginUrl: config.adapter.loginUrl
+        })
+        hideLoginModalOnAuth()
         logger('trace', '[Adapter] 2.0 adapter enabled and injected.');
     } catch (e) {
         if (e instanceof Error && e.message) {

@@ -12,6 +12,7 @@
  */
 
 import {logger} from "@utils/logger";
+import type {MembershipsMap} from "@/config";
 
 export function getPlanAttribute(id: string): string | null {
     logger('debug', `[Adapter] Getting plan attribute for ID: ${id}`);
@@ -32,11 +33,11 @@ export function getPlanAttribute(id: string): string | null {
 export function replaceDataMsPlanAttribute(
     el: HTMLElement,
     oldId: string,
-    importedMemberships: Record<string, string>
+    importedMemberships: MembershipsMap[]
 ) {
     logger('debug', `[Adapter] Replacing plan attribute for old ID: ${oldId}`);
 
-    const newId = importedMemberships[oldId];
+    const newId = importedMemberships.find(m => m.oldId === oldId)?.newId;
     if (!newId) {
         logger('error', `[Adapter] Plan ID "${oldId}" not found in importedMemberships mapping`);
         return;
@@ -57,11 +58,11 @@ export function replaceDataMsPlanAttribute(
 export function replaceDataMsMembershipAttribute(
     el: HTMLElement,
     oldId: string,
-    importedMemberships: Record<string, string>
+    importedMemberships: MembershipsMap[]
 ) {
     logger('debug', `[Adapter] Replacing membership attribute for old ID: ${oldId}`);
 
-    const newId = importedMemberships[oldId];
+    const newId = importedMemberships.find(m => m.oldId === oldId)?.newId;
     if (!newId) {
         logger('error', `[Adapter] Membership ID "${oldId}" not found in importedMemberships mapping`);
         return;
@@ -89,7 +90,7 @@ export function replaceDataMsMembershipAttribute(
     logger('debug', `[Adapter] Successfully replaced membership attribute: ${oldId} -> ${newId} (${attr})`);
 }
 
-export function processDataMsPlanAttributes(importedMemberships: Record<string, string>): number {
+export function processDataMsPlanAttributes(importedMemberships: MembershipsMap[]): number {
     logger('debug', '[Adapter] Processing data-ms-plan attributes');
 
     const planElements = document.querySelectorAll("[data-ms-plan]");
@@ -107,7 +108,7 @@ export function processDataMsPlanAttributes(importedMemberships: Record<string, 
     return planElements.length;
 }
 
-export function processDataMsMembershipAttributes(importedMemberships: Record<string, string>): number {
+export function processDataMsMembershipAttributes(importedMemberships: MembershipsMap[]): number {
     logger('debug', '[Adapter] Processing data-ms-membership attributes');
 
     const membershipElements = document.querySelectorAll("[data-ms-membership]");

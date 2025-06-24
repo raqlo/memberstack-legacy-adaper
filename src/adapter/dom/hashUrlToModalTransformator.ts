@@ -13,15 +13,16 @@
 
 import {logger} from "@utils/logger";
 import {getPlanAttribute} from "./planAttributeHelpers";
+import type { MembershipsMap } from "@/config";
 
 export function replaceSignupHref(
     el: HTMLElement,
     extractedId: string,
-    importedMemberships: Record<string, string>
+    importedMemberships: MembershipsMap[]
 ) {
     logger('debug', `[Adapter] Replacing signup href for extracted ID: ${extractedId}`);
 
-    const newId = importedMemberships[extractedId];
+    const newId = importedMemberships.find(m => m.oldId === extractedId)?.newId;
     if (!newId) {
         logger('error', `[Adapter] Signup href ID "${extractedId}" not found in importedMemberships mapping`);
         return;
@@ -51,7 +52,7 @@ export function replaceLoginHref(el: HTMLElement) {
     logger('debug', '[Adapter] Successfully replaced login href with modal');
 }
 
-export function processHashSignupUrls(importedMemberships: Record<string, string>): number {
+export function processHashSignupUrls(importedMemberships: MembershipsMap[]): number {
     logger('debug', '[Adapter] Processing hash-only signup URLs');
 
     const signupElements = document.querySelectorAll('a[href^="#/ms/signup/"]');

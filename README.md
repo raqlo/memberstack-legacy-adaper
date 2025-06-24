@@ -87,13 +87,13 @@ but it's routed to 2.0 behavior via the shim
 
 ## Configuration Properties
 
-| Property                      | Type                     | Required | Default     | Description                                                   |
-|-------------------------------|--------------------------|----------|-------------|---------------------------------------------------------------|
-| `appIdV1`                     | `string`                 | **Yes**  | -           | Your Memberstack V1 App ID                                    |
-| `publicKey`                   | `string`                 | No       | -           | Your Memberstack V2 Public Key (starts with `pk_` or `pk_sb`) |
-| `appId`                       | `string`                 | **Yes**  | -           | Your Memberstack V2 App ID (starts with `app_cl`)             |
-| `debug`                       | `boolean`                | No       | `true`      | Enable debug logging in console                               |
-| `adapter.enabled`             | `boolean`                | No       | `true`      | Enable/disable the adapter functionality                      |
-| `adapter.forcedVersion`       | `"v1"` or `"v2"`         | No       | `undefined` | Force a specific version regardless of other settings         |
-| `adapter.importedMemberships` | `Record<string, string>` | No       | `{}`        | Maps V1 membership IDs to V2 membership IDs for migration     |
+| Property                      | Type                                           | Required | Default     | Description                                                   |
+|-------------------------------|------------------------------------------------|----------|-------------|---------------------------------------------------------------|
+| `appIdV1`                     | `string`                                       | **Yes**  | -           | Your Memberstack V1 App ID                                    |
+| `publicKey`                   | `string`                                       | No       | -           | Your Memberstack V2 Public Key (starts with `pk_` or `pk_sb`) |
+| `appId`                       | `string`                                       | **Yes**  | -           | Your Memberstack V2 App ID (starts with `app_cl`)             |
+| `debug`                       | `boolean`                                      | No       | `true`      | Enable debug logging in console                               |
+| `adapter.enabled`             | `boolean`                                      | No       | `true`      | Enable/disable the adapter functionality                      |
+| `adapter.forcedVersion`       | `"v1"` or `"v2"`                               | No       | `undefined` | Force a specific version regardless of other settings         |
+| `adapter.importedMemberships` | `{name: string, oldId: string: newIdString}[]` | No       | `{}`        | Maps V1 membership IDs to V2 membership IDs for migration     |
 
