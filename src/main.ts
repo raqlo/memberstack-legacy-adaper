@@ -11,7 +11,8 @@ import {
 import {processPasswordResetUrls} from "@dom/hashUrlToForgotPasswordModal";
 import {processRelativeUrlWithHashUrls} from "@dom/relativeUrlWithHashToPlanAttribute";
 import {processContentUrls} from "@dom/hashUrlToMsContentTransformator";
-import {hideHashMembershipRedirectUrlOnUnAuth, hideLoginModalOnAuth, hideProfileModalOnUnAuth} from "@dom/hideElemsOnAuth";
+import { hideLoginModalOnAuth, hideProfileModalOnUnAuth} from "@dom/hideElemsOnAuth";
+import {transformMembershipRedirectLinks} from "@dom/hashUrlToMsActionTransformer";
 
 async function enableLegacyAdapter() {
     // exec before memberstack loads
@@ -21,6 +22,7 @@ async function enableLegacyAdapter() {
         updateAllLogoutAttributes();
         processPasswordResetUrls();
         processContentUrls()
+        transformMembershipRedirectLinks()
     })
     logger('trace', '[Adapter] starting legacy adapter...')
     try {
@@ -41,7 +43,6 @@ async function enableLegacyAdapter() {
         })
         hideProfileModalOnUnAuth()
         hideLoginModalOnAuth()
-        hideHashMembershipRedirectUrlOnUnAuth()
         logger('trace', '[Adapter] 2.0 adapter enabled and injected.');
     } catch (e) {
         if (e instanceof Error && e.message) {
