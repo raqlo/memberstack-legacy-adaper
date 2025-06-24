@@ -24,3 +24,15 @@ export function hideProfileModalOnUnAuth() {
         profileModals.forEach(el => el.setAttribute('style', 'display: none'))
     }
 }
+
+export function hideHashMembershipRedirectUrlOnUnAuth() {
+    logger('debug', '[Adapter] Checking for membership redirect URL on page load')
+    const redirectUrlsInElems = document.querySelectorAll('[href="#/ms/membership/redirect"]')
+    if(redirectUrlsInElems.length === 0) {
+        return
+    }
+    if(!isMemberAuthV2()) {
+        logger('warn', `[Adapter] ${redirectUrlsInElems.length} hash membership redirect URL(s) were hidden on this page`)
+        redirectUrlsInElems.forEach(el => el.setAttribute('style', 'display: none'))
+    }
+}
