@@ -1,4 +1,5 @@
 /**
+ * @deprecated
  * @fileoverview Handles signup forms on destination pages that were reached via hash URLs.
  * Extracts plan IDs from URL hash fragments and applies them to signup forms on the current page.
  *
