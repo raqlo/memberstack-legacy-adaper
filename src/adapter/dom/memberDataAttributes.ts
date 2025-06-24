@@ -28,7 +28,7 @@ function getNestedProperty(obj: v2PlanItem, path: string): string {
         value = obj.planId; // name doesn't exist in v2
         logger('debug', `[Adapter] Mapped membership.name to planId: ${value}`);
     } else if (path === "membership.amount") {
-        value = String(obj.payment?.amount) || '0';
+        value = obj.payment?.amount ? String(obj.payment?.amount) : ' ';
         logger('debug', `[Adapter] Mapped membership.amount to payment.amount: ${value}`);
     } else if (path === "membership.status") {
         value = obj.status;
