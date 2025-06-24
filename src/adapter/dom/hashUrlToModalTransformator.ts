@@ -52,6 +52,15 @@ export function replaceLoginHref(el: HTMLElement) {
     logger('debug', '[Adapter] Successfully replaced login href with modal');
 }
 
+export function replaceProfileHref(el: HTMLElement) {
+    logger('debug', '[Adapter] Replacing profile href with modal');
+
+    el.setAttribute("href", "#");
+    el.setAttribute("data-ms-modal", "profile");
+
+    logger('debug', '[Adapter] Successfully replaced profile href with modal');
+}
+
 export function processHashSignupUrls(importedMemberships: MembershipsMap[]): number {
     logger('debug', '[Adapter] Processing hash-only signup URLs');
 
@@ -91,4 +100,19 @@ export function processHashLoginUrls(): number {
     }
 
     return loginElements.length;
+}
+
+export function processHashProfileUrls(): number {
+    logger('debug', '[Adapter] Processing hash-only profile URLs');
+
+    const profileElements = document.querySelectorAll('a[href="#/ms/profile"]');
+
+    if (profileElements.length > 0) {
+        logger('warn', `[Adapter] Found ${profileElements.length} elements with profile href attributes that will be converted to modal`);
+
+        profileElements.forEach(el => {
+            replaceProfileHref(el as HTMLElement);
+        });
+    }
+    return profileElements.length;
 }

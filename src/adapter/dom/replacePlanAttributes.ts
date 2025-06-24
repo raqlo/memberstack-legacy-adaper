@@ -14,7 +14,7 @@
 
 import {logger} from "@utils/logger";
 import {processDataMsPlanAttributes, processDataMsMembershipAttributes} from "./planAttributeHelpers";
-import {processHashSignupUrls, processHashLoginUrls} from "./hashUrlToModalTransformator";
+import {processHashSignupUrls, processHashLoginUrls, processHashProfileUrls} from "./hashUrlToModalTransformator";
 import {processRelativeUrlWithHashUrls} from "@dom/relativeUrlWithHashToPlanAttribute";
 import type {MembershipsMap} from "@/config";
 
@@ -30,7 +30,8 @@ export function updateAllPlanAttributes(importedMemberships: MembershipsMap[] = 
     const hashSignupCount = processHashSignupUrls(importedMemberships);
     const hashLoginCount = processHashLoginUrls();
     const relativeUrlWithHashCount = processRelativeUrlWithHashUrls(importedMemberships);
+    const hashProfileCount = processHashProfileUrls()
 
-    const totalProcessed = planCount + membershipCount_processed + hashSignupCount + hashLoginCount + relativeUrlWithHashCount;
-    logger('info', `[Adapter] Plan attributes update completed. Processed ${totalProcessed} elements total (${relativeUrlWithHashCount} hash signup URLs logged)`);
+    const totalProcessed = planCount + membershipCount_processed + hashSignupCount + hashLoginCount + relativeUrlWithHashCount + hashProfileCount;
+    logger('info', `[Adapter] Plan attributes update completed. Processed ${totalProcessed} elements total (${relativeUrlWithHashCount} hash signup URLs logged`);
 }

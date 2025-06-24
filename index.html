@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8"/>
     <link href="/vite.svg" rel="icon" type="image/svg+xml"/>
-    <link href="https://cdn.prod.website-files.com/6852bf97682d70b57c381a24/css/adapter-demo.shared.3316ba894.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.prod.website-files.com/6852bf97682d70b57c381a24/css/adapter-demo.shared.3316ba894.css"
+          rel="stylesheet" type="text/css"/>
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
+    <link crossorigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect"/>
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
     <script type="text/javascript">
         WebFont.load({
@@ -15,45 +16,45 @@
         });
     </script>
     <script type="text/javascript">
-        !function(o, c) {
+        !function (o, c) {
             var n = c.documentElement
                  , t = " w-mod-";
             n.className += t + "js",
-            ("ontouchstart"in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
+            ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
         }(window, document);
     </script>
-    <link href="https://cdn.prod.website-files.com/6852bf97682d70b57c381a24/6852bf97682d70b57c381a3b_cy%20fav.png" rel="shortcut icon" type="image/x-icon"/>
-    <link href="https://cdn.prod.website-files.com/6852bf97682d70b57c381a24/6852bf97682d70b57c381a3f_cy%20web.png" rel="apple-touch-icon"/>
+    <link href="https://cdn.prod.website-files.com/6852bf97682d70b57c381a24/6852bf97682d70b57c381a3b_cy%20fav.png"
+          rel="shortcut icon" type="image/x-icon"/>
+    <link href="https://cdn.prod.website-files.com/6852bf97682d70b57c381a24/6852bf97682d70b57c381a3f_cy%20web.png"
+          rel="apple-touch-icon"/>
     <!-- Memberstack -->
-<!--    <script src="https://api.memberstack.io/static/memberstack.js?webflow" data-memberstack-id="888c1db997d6d6e5601e4d3ffc5f0ba9"> </script>-->
-    <script type="module" src="/src/main.ts"></script>
-<!--    <script src="http://localhost:4173/memberstack-adapter.js"></script>-->
+    <!--    <script src="https://api.memberstack.io/static/memberstack.js?webflow" data-memberstack-id="888c1db997d6d6e5601e4d3ffc5f0ba9"> </script>-->
+    <script src="/src/main.ts" type="module"></script>
+    <!--    <script src="http://localhost:4173/memberstack-adapter.js"></script>-->
 
 </head>
 <body>
 <div id="app">
-    <button data-ms-modal="login">Login </button>
+    <button data-ms-modal="login">Login</button>
     <button data-ms-modal="profile">Profile</button>
     <button ms-login="true">Login</button>
     <button ms-forgot="true">Forgot</button>
-    <div data-ms-member="membership.status" ></div>
+    <div data-ms-member="membership.status"></div>
 </div>
 
-<div class="hero-section"><div class="container hero-container"><div><h1 ms-rewrite="Hello World!" class="home-h1">Let's do some testing...<br></h1><div class="flex"><div class="_100"><h4>Hidden Content with Attributes</h4><p data-ms-content="members">You are logged <strong>in</strong> - attribute</p><p data-ms-content="!members">You are logged <strong>out</strong> - attribute</p><p data-ms-content="!free">I am <strong>NOT free </strong>content</p><p data-ms-content="!paid">I am <strong>NOT paid</strong> content</p></div><div class="_100"><h4>Hidden Content with Links</h4><a href="/pricing#/ms/content/members" class="link-block w-inline-block"><p>You are logged in - hidden link</p></a><a href="/pricing#/ms/content/!members" class="link-block w-inline-block"><p>You are logged out - hidden link</p></a><a href="/pricing#/ms/content/!free" class="link-block w-inline-block"><p>I am NOT&nbsp;free content</p></a><a href="/pricing#/ms/content/!paid" class="link-block w-inline-block"><p>I am NOT&nbsp;paid content</p></a></div></div><div class="flex"><div class="_100"><h4>Data-ms-rewrite (Line 2)</h4><p ms-rewrite="It's working!">Both lines are the same when logged out. </p><p>Both lines are the same when logged out. </p></div><div class="_100"><h4>Personalized Content</h4><p>Hey <strong data-ms-member="first-name">{{FIRST-NAME}}</strong>! </p><p>Your email is <strong data-ms-member="email">{{EMAIL}}</strong></p></div></div><div><h4>Signup Modals</h4><a href="#/ms/signup/6852cec1835a9cececde8e78" class="button w-button">Free - Link</a><div class="space inline"></div><a data-ms-membership="6852cec1835a9cececde8e78" href="#" class="button w-button">Free - Attribute</a><div class="space inline"></div><a href="#/ms/signup/6852cf1a2cf7a0caf2dfcbe2" class="button w-button">Paid - Link</a><div class="space inline"></div><a href="#" class="button w-button">Paid - Attribute</a></div><div><h4>Login Modals</h4><a href="#/ms/login" class="button dark-blue w-button">Login Modal</a><div class="space inline"></div><a href="/login" class="button dark-blue w-button">Login Form</a></div><div><h4>Sign up forms</h4><a href="/signup/#/ms/signup/6852cec1835a9cececde8e78" class="button w-button">Free - Link</a><div class="space inline"></div><a data-ms-membership="6852cec1835a9cececde8e78" href="/signup" class="button w-button">Free - Attribute</a><div class="space inline"></div><a href="/signup#/ms/signup/6852cf1a2cf7a0caf2dfcbe2" class="button w-button">Paid - Link</a><div class="space inline"></div><a data-ms-membership="6852cf1a2cf7a0caf2dfcbe2" href="/signup" class="button w-button">Paid - Attribute</a><div class="space inline"></div><a data-ms-membership="6852cf1a2cf7a0caf2dfcbe2" href="/signup" class="button w-button">Sign Up Form with a Free Membership</a><div class="space inline"></div><a data-ms-membership="6852cf1a2cf7a0caf2dfcbe2" href="/signup" class="button w-button">Sign Up Form with a Paid Membership</a></div></div></div><div class="container hero-container"></div></div>
-
-<div class="login-container w-form"><h1 class="login-head">Welcome back!</h1><form id="sign-up" name="wf-form-Sign-up-Form" data-name="Sign up Form" method="post" data-ms-form="signup" data-wf-page-id="6852bf97682d70b57c381a7b" data-wf-element-id="1fadcb18-b6b6-244e-43da-1ba0e68184d4" aria-label="Sign up Form"><label for="" class="login-label">Email</label><input class="login-field w-input" maxlength="256" name="email" data-name="email" placeholder="Email Address" data-cy="emailInput" type="email" id="field" data-ms-member="email" required=""><label for="" class="login-label">Password</label><input class="login-field w-input" maxlength="256" name="password" data-name="Password" placeholder="Password" data-cy="passwordInput" type="password" id="password" data-ms-member="password" required=""><input type="submit" data-wait="Please wait..." data-cy="loginSubmit" class="button full-button w-button" value="CONTINUE"><a href="#/ms/password-reset" class="password-link">I forgot my password</a></form><div class="w-form-done" tabindex="-1" role="region" aria-label="Sign up Form success"><div>Thank you! Your submission has been received!</div></div><div class="error-message w-form-fail" tabindex="-1" role="region" aria-label="Sign up Form failure"><div>Oops! Something went wrong while submitting the form.</div></div></div>
+<div class="hero-section"><div class="container hero-container"><div><h1 ms-rewrite="Hello World!" class="home-h1">Let's do some testing...<br></h1><div class="flex"><div class="_100"><h4>Hidden Content with Attributes</h4><p data-ms-content="members">You are logged <strong>in</strong> - attribute</p><p data-ms-content="!members">You are logged <strong>out</strong> - attribute</p><p data-ms-content="free">I am <strong>free</strong> content</p><p data-ms-content="!free">I am <strong>NOT free </strong>content</p><p data-ms-content="paid">I am <strong>paid</strong> content</p><p data-ms-content="!paid">I am <strong>NOT paid</strong> content</p></div><div class="_100"><h4>Hidden Content with Links</h4><a href="/pricing#/ms/content/members" class="link-block w-inline-block"><p>You are logged in - hidden link</p></a><a href="/pricing#/ms/content/!members" class="link-block w-inline-block"><p>You are logged out - hidden link</p></a><a href="/pricing#/ms/content/free" class="link-block w-inline-block"><p>I am free content</p></a><a href="/pricing#/ms/content/!free" class="link-block w-inline-block"><p>I am NOT&nbsp;free content</p></a><a href="/pricing#/ms/content/paid" class="link-block w-inline-block"><p>I am paid content</p></a><a href="/pricing#/ms/content/!paid" class="link-block w-inline-block"><p>I am NOT&nbsp;paid content</p></a></div></div><div class="flex"><div class="_100"><h4>Data-ms-rewrite (Line 2)</h4><p>Both lines are the same when logged out. </p><p ms-rewrite="It's working!">Both lines are the same when logged out. </p></div><div class="_100"><h4>Personalized Content</h4><p>Hey <strong data-ms-member="first-name">{{FIRST-NAME}}</strong></p><p>Your email is <strong data-ms-member="email">{{EMAIL}}</strong></p><p data-ms-member="signup-date.DateTimeFormat()">You signed up on:&nbsp;<strong>{{DATE}}</strong></p><p>(Attribute) Your member-specific page is<a href="#" data-ms-member="member-page" class="bold" style="display: none;"> here</a></p><p>(#Link) Your member-specific page is<a href="#/ms/member-page/default" class="bold" style="display: none;"> here</a></p><p>(#Link) Your <strong>Login redirect</strong> is<a href="#/ms/membership/redirect" class="bold"> here</a></p></div></div><div class="flex"><div class="_100"><h4>My plans</h4><p>My plan name is <span data-ms-member="membership.name"><strong>{{My plan}}</strong></span></p><p>I paid an amount of <span data-ms-member="membership.amount"><strong>{{Amount paid}}</strong></span></p><p>My plan status is <span data-ms-member="membership.status"><strong>{{Plan Status}}</strong></span></p></div></div><div><h4>Signup Modals</h4><a href="#/ms/signup/5e6fc6565173560017e39b55" class="button w-button">Free - Link</a><div class="space inline"></div><a data-ms-membership="5e6fc6565173560017e39b55" href="#" class="button w-button">Free - Attribute</a><div class="space inline"></div><a href="#/ms/signup/5c61ea857579e5001704b4ea" class="button w-button">Paid - Link</a><div class="space inline"></div><a data-ms-membership="5c61ea857579e5001704b4ea" href="#" class="button w-button">Paid - Attribute</a></div><div><h4>Login</h4><a href="#/ms/login" class="button dark-blue w-button">Login Modal</a><div class="space inline"></div><a href="/login" class="button dark-blue w-button">Login Form</a></div><div><h4>Sign up forms</h4><a href="/signup/#/ms/signup/5e6fc6565173560017e39b55" class="button w-button">Free - Link</a><div class="space inline"></div><a data-ms-membership="5e6fc6565173560017e39b55" href="/signup" class="button w-button">Free - Attribute</a><div class="space inline"></div><a href="/signup#/ms/signup/5c61ea857579e5001704b4ea" class="button w-button">Paid - Link</a><div class="space inline"></div><a data-ms-membership="5c61ea857579e5001704b4ea" href="/signup" class="button w-button">Paid - Attribute</a><div class="space inline"></div><a href="/signup-free" class="button w-button">Sign Up Form with a Free Membership</a><div class="space inline"></div><a href="/signup-paid" class="button w-button">Sign Up Form with a Paid Membership</a></div><div><h4>Forgot Password</h4><a href="#/ms/password-reset" class="button dark-blue w-button">Forgot Password Modal</a></div><div><h4>Profile</h4><a href="#/ms/profile" class="button dark-blue w-button">Profile Modal</a><div class="space inline"></div><a href="/profile-update" class="button dark-blue w-button">Profile Form</a><div class="space inline"></div><a href="/onboarding" class="button dark-blue w-button">Profile Onboarding</a></div></div></div><div class="container hero-container"></div></div>
 <script>
     /**
      * While developing, I cannot simulate a blocking script on the page because module scripts are loaded asynchronously.
      * Because of this, I am using the load event to simulate the blocking script.
      */
     window.addEventListener('load', () => {
-    
-    window.MemberStack.onReady.then(e => console.log(e))
+        
+        window.MemberStack.onReady.then(e => console.log(e))
         
         console.log(window.MemberStack.getToken())
     })
-    
+
 
 </script>
 </body>
