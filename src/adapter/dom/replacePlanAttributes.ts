@@ -16,8 +16,9 @@ import {logger} from "@utils/logger";
 import {processDataMsPlanAttributes, processDataMsMembershipAttributes} from "./planAttributeHelpers";
 import {processHashSignupUrls, processHashLoginUrls} from "./hashUrlToModalTransformator";
 import {processRelativeUrlWithHashUrls} from "@dom/relativeUrlWithHashToPlanAttribute";
+import type {MembershipsMap} from "@/config";
 
-export function updateAllPlanAttributes(importedMemberships: Record<string, string>) {
+export function updateAllPlanAttributes(importedMemberships: MembershipsMap[] = []) {
     logger('trace', '[Adapter] Starting plan attributes update process');
 
     const membershipCount = Object.keys(importedMemberships).length;

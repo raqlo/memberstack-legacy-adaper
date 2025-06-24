@@ -14,16 +14,17 @@
 
 import {logger} from "@utils/logger";
 import {getPlanAttribute} from "./planAttributeHelpers";
+import type {MembershipsMap} from "@/config";
 
 export function replaceRelativeUrlWithHashSignup(
     el: HTMLElement,
     baseUrl: string,
     extractedId: string,
-    importedMemberships: Record<string, string>
+    importedMemberships: MembershipsMap[]
 ) {
     logger('debug', `[Adapter] Replacing URL hash signup for base URL: ${baseUrl}, extracted ID: ${extractedId}`);
 
-    const newId = importedMemberships[extractedId];
+    const newId = importedMemberships.find(m => m.oldId === extractedId)?.newId;
     if (!newId) {
         logger('error', `[Adapter] URL hash signup ID "${extractedId}" not found in importedMemberships mapping`);
         return;
@@ -42,7 +43,7 @@ export function replaceRelativeUrlWithHashSignup(
     logger('debug', `[Adapter] Successfully replaced URL hash signup: ${baseUrl}#/ms/signup/${extractedId} -> ${baseUrl} with ${attr}="${newId}"`);
 }
 
-export function processRelativeUrlWithHashUrls(importedMemberships: Record<string, string>): number {
+export function processRelativeUrlWithHashUrls(importedMemberships: MembershipsMap[]): number {
     logger('debug', '[Adapter] Processing URL hash signup URLs');
 
     const signupElements = document.querySelectorAll('a[href*="#/ms/signup/"]');
