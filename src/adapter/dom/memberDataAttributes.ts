@@ -14,8 +14,9 @@
 import {logger} from "@utils/logger";
 import {getCurrentMemberV2, isMemberAuthV2} from "@utils/sessions";
 import type {v2CurrentMember, v2PlanItem} from "@/types/v2-entities";
+import type {MembershipsMap} from "@/config";
 
-function getNestedProperty(obj: v2PlanItem, path: string): string {
+function getNestedProperty(obj: v2PlanItem, path: string, importedMemberships: MembershipsMap[]): string {
     logger('debug', `[Adapter] Getting nested property "${path}" from plan item`);
 
     if (!obj) {
@@ -25,7 +26,7 @@ function getNestedProperty(obj: v2PlanItem, path: string): string {
 
     let value = '';
     if (path === "membership.name") {
-        value = obj.planId; // name doesn't exist in v2
+        value = importedMemberships.find(m => m.newId === obj.planId)?.name || ' ';
         logger('debug', `[Adapter] Mapped membership.name to planId: ${value}`);
     } else if (path === "membership.amount") {
         value = obj.payment?.amount ? String(obj.payment?.amount) : ' ';
@@ -40,7 +41,7 @@ function getNestedProperty(obj: v2PlanItem, path: string): string {
     return value;
 }
 
-export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, memberData: v2CurrentMember): boolean {
+export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, memberData: v2CurrentMember, importedMemberships: MembershipsMap[]): boolean {
     logger('trace', `[Adapter] Replacing member attribute for property: ${propertyPath}`);
 
     // Only handle membership-related attributes
@@ -54,7 +55,7 @@ export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, me
         return false;
     }
 
-    const value = getNestedProperty(memberData.planConnections[0], propertyPath);
+    const value = getNestedProperty(memberData.planConnections[0], propertyPath, importedMemberships);
 
     if (value) {
         el.textContent = value;
@@ -66,7 +67,7 @@ export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, me
     }
 }
 
-export function updateAllMemberAttributes(): number {
+export function updateAllMemberAttributes(importedMemberships: MembershipsMap[]): number {
     logger('trace', '[Adapter] Starting member attributes update process');
 
     if (!isMemberAuthV2()) {
@@ -91,7 +92,7 @@ export function updateAllMemberAttributes(): number {
        memberElements.forEach(el => {
            const propertyPath = el.getAttribute("data-ms-member");
            if (propertyPath) {
-               const success = replaceMemberAttribute(el as HTMLElement, propertyPath, memberData);
+               const success = replaceMemberAttribute(el as HTMLElement, propertyPath, memberData, importedMemberships);
                if (success) updatedCount++;
            }
        });

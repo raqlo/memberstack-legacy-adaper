@@ -3,7 +3,7 @@ import {createLegacyProxy} from './adapter';
 import {logger} from '@utils/logger';
 import {type AdapterConfig, config} from "./config";
 import {deleteV1Session} from "@utils/sessions";
-import { updateAllPlanAttributes} from "@dom/replacePlanAttributes";
+import {updateAllPlanAttributes} from "@dom/replacePlanAttributes";
 import {updateAllLogoutAttributes} from "@dom/replaceUtilityAuthAttributes";
 import {
     updateAllMemberUpdates
@@ -35,7 +35,10 @@ async function enableLegacyAdapter() {
 
         window.MemberStack = createLegacyProxy(msDom);
         // exec after memberstack loads
-        updateAllMemberUpdates()
+        updateAllMemberUpdates({
+            importMemberships: config.adapter.importedMemberships,
+            loginUrl: config.adapter.loginUrl
+        })
         hideLoginModalOnAuth()
         logger('trace', '[Adapter] 2.0 adapter enabled and injected.');
     } catch (e) {
