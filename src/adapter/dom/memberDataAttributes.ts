@@ -1,6 +1,7 @@
+
 /**
  * @fileoverview Handles data-ms-member attributes for displaying member-specific data.
- * Populates elements with member information like plan names, amounts, and status.
+ * Populates elements with member information like plan names, amounts, status, and formatted dates.
  *
  * @example
  * // Before: <span data-ms-member="membership.name">Loading...</span>
@@ -9,6 +10,10 @@
  * @example
  * // Before: <div data-ms-member="membership.amount">$0</div>
  * // After:  <div data-ms-member="membership.amount">$29.99</div>
+ *
+ * @example
+ * // Before: <span data-ms-member="signup-date.DateTimeFormat()">Loading...</span>
+ * // After:  <span data-ms-member="signup-date.DateTimeFormat()">6/24/2025</span>
  */
 
 import {logger} from "@utils/logger";
@@ -41,13 +46,37 @@ function getNestedProperty(obj: v2PlanItem, path: string, importedMemberships: M
     return value;
 }
 
-export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, memberData: v2CurrentMember, importedMemberships: MembershipsMap[]): boolean {
-    logger('trace', `[Adapter] Replacing member attribute for property: ${propertyPath}`);
+function formatSignupDate(memberData: v2CurrentMember): string {
+    logger('debug', '[Adapter] Formatting signup date');
 
-    // Only handle membership-related attributes
+    if (!memberData.createdAt) {
+        logger('warn', '[Adapter] No signup date found in member data');
+        return '';
+    }
+    try {
+        const date = new Date(memberData.createdAt);
+
+        if (isNaN(date.getTime())) {
+            logger('error', `[Adapter] Invalid signup date: ${memberData.createdAt}`);
+            return '';
+        }
+
+        const formatted = new Intl.DateTimeFormat("en-US").format(date)
+
+        logger('debug', `[Adapter] Formatted signup date: ${formatted}`);
+        return formatted;
+    } catch (error) {
+        logger('error', `[Adapter] Error formatting signup date: ${error}`);
+        return '';
+    }
+}
+
+export function replaceMembershipAttribute(el: HTMLElement, propertyPath: string, memberData: v2CurrentMember, importedMemberships: MembershipsMap[]): boolean {
+    logger('trace', `[Adapter] Replacing membership attribute for property: ${propertyPath}`);
+
     if (!propertyPath.startsWith('membership.')) {
         logger('debug', `[Adapter] Skipping non-membership property: ${propertyPath}`);
-        return false; // Let Memberstack handle non-membership attributes
+        return false;
     }
 
     if (!memberData.planConnections || memberData.planConnections.length === 0) {
@@ -59,10 +88,25 @@ export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, me
 
     if (value) {
         el.textContent = value;
-        logger('debug', `[Adapter] Set member property "${propertyPath}" to "${value}" on ${el.tagName} element`);
+        logger('debug', `[Adapter] Set membership property "${propertyPath}" to "${value}" on ${el.tagName} element`);
         return true;
     } else {
-        logger('debug', `[Adapter] Empty value for member property "${propertyPath}" - element content not updated`);
+        logger('debug', `[Adapter] Empty value for membership property "${propertyPath}" - element content not updated`);
+        return false;
+    }
+}
+
+export function replaceSignupDateAttribute(el: HTMLElement, memberData: v2CurrentMember): boolean {
+    logger('trace', '[Adapter] Replacing signup date attribute');
+
+    const formattedDate = formatSignupDate(memberData);
+
+    if (formattedDate) {
+        el.textContent = formattedDate;
+        logger('debug', `[Adapter] Set signup date to "${formattedDate}" on ${el.tagName} element`);
+        return true;
+    } else {
+        logger('debug', '[Adapter] Could not format signup date - element content not updated');
         return false;
     }
 }
@@ -84,19 +128,31 @@ export function updateAllMemberAttributes(importedMemberships: MembershipsMap[])
     logger('debug', `[Adapter] Retrieved member data for member ID: ${memberData.id}`);
 
     let updatedCount = 0;
-    // Handle only membership-related data-ms-member attributes
-    const memberElements = document.querySelectorAll("[data-ms-member^='membership.']");
-   if(memberElements.length) {
-       logger('warn', `[Adapter] Found ${memberElements.length} elements with membership-related data-ms-member attributes`);
 
-       memberElements.forEach(el => {
-           const propertyPath = el.getAttribute("data-ms-member");
-           if (propertyPath) {
-               const success = replaceMemberAttribute(el as HTMLElement, propertyPath, memberData, importedMemberships);
-               if (success) updatedCount++;
-           }
-       });
-   }
+    // Handle membership-related data-ms-member attributes
+    const membershipElements = document.querySelectorAll("[data-ms-member^='membership.']");
+    if(membershipElements.length) {
+        logger('warn', `[Adapter] Found ${membershipElements.length} elements with membership-related data-ms-member attributes`);
+
+        membershipElements.forEach(el => {
+            const propertyPath = el.getAttribute("data-ms-member");
+            if (propertyPath) {
+                const success = replaceMembershipAttribute(el as HTMLElement, propertyPath, memberData, importedMemberships);
+                if (success) updatedCount++;
+            }
+        });
+    }
+
+    // Handle signup-date.DateTimeFormat() attributes
+    const signupDateElements = document.querySelectorAll("[data-ms-member='signup-date.DateTimeFormat()']");
+    if(signupDateElements.length) {
+        logger('warn', `[Adapter] Found ${signupDateElements.length} elements with signup-date.DateTimeFormat() attributes`);
+
+        signupDateElements.forEach(el => {
+            const success = replaceSignupDateAttribute(el as HTMLElement, memberData);
+            if (success) updatedCount++;
+        });
+    }
 
     logger('info', `[Adapter] Member attributes update completed. Processed ${updatedCount} elements`);
     return updatedCount;

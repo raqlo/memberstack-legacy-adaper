@@ -11,11 +11,23 @@
  * // After:  <a data-ms-modal="login">Login</a>
  *
  * @example
+ * // Before: <a data-ms-member="member-page">Dashboard</a>
+ * // After:  <a data-ms-action="login-redirect"="login">Dashboard</a>
+ *
+ * @example
  * // Before: <span ms-forgot>Reset Password</span>
  * // After:  <span data-ms-modal="forgot-password">Reset Password</span>
  */
 
 import {logger} from "@utils/logger";
+
+export function replaceMemberPageAttribute(el: HTMLElement) {
+    logger('debug', `Replacing member-page attribute for element: ${el.tagName}`);
+
+    // Remove old attribute and set new one
+    el.removeAttribute("data-ms-member");
+    el.setAttribute("data-ms-action", "login-redirect");
+}
 
 export function replaceLogoutAttribute(el: HTMLElement) {
     logger('debug',`Replacing logout attribute for element:${el.tagName}`)
@@ -94,6 +106,16 @@ export function updateAllLogoutAttributes() {
         });
     }
 
-    const totalUpdated = dataLogoutElements.length + logoutElements.length + forgotElements.length + loginElements.length;
-    logger('debug',`Attribute update completed. Updated ${totalUpdated} elements total`);
+    const memberPageElements = document.querySelectorAll('[data-ms-member="member-page"]');
+
+    if (memberPageElements.length > 0) {
+        logger('warn', `Found ${memberPageElements.length} elements with deprecated data-ms-member="member-page" attribute`);
+        memberPageElements.forEach(el => {
+            replaceMemberPageAttribute(el as HTMLElement);
+        });
+    }
+
+    const totalUpdated = dataLogoutElements.length + logoutElements.length + forgotElements.length + loginElements.length + memberPageElements.length;
+    logger('debug', `Attribute update completed. Updated ${totalUpdated} elements total`);
+
 }
