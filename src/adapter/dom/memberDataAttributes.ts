@@ -41,7 +41,7 @@ function getNestedProperty(obj: v2PlanItem, path: string, importedMemberships: M
     return value;
 }
 
-export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, memberData: v2CurrentMember, importedMemberships: MembershipsMap[]): boolean {
+export function replaceMembershipMemberAttribute(el: HTMLElement, propertyPath: string, memberData: v2CurrentMember, importedMemberships: MembershipsMap[]): boolean {
     logger('trace', `[Adapter] Replacing member attribute for property: ${propertyPath}`);
 
     // Only handle membership-related attributes
@@ -66,6 +66,7 @@ export function replaceMemberAttribute(el: HTMLElement, propertyPath: string, me
         return false;
     }
 }
+
 
 export function updateAllMemberAttributes(importedMemberships: MembershipsMap[]): number {
     logger('trace', '[Adapter] Starting member attributes update process');
@@ -92,7 +93,7 @@ export function updateAllMemberAttributes(importedMemberships: MembershipsMap[])
        memberElements.forEach(el => {
            const propertyPath = el.getAttribute("data-ms-member");
            if (propertyPath) {
-               const success = replaceMemberAttribute(el as HTMLElement, propertyPath, memberData, importedMemberships);
+               const success = replaceMembershipMemberAttribute(el as HTMLElement, propertyPath, memberData, importedMemberships);
                if (success) updatedCount++;
            }
        });
@@ -101,3 +102,4 @@ export function updateAllMemberAttributes(importedMemberships: MembershipsMap[])
     logger('info', `[Adapter] Member attributes update completed. Processed ${updatedCount} elements`);
     return updatedCount;
 }
+
