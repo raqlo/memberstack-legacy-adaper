@@ -44,9 +44,9 @@ describe('planAttributeHelpers', () => {
     });
 
     describe('getPlanAttribute', () => {
-        it('should return data-ms-plan:price for price IDs', () => {
-            expect(getPlanAttribute('prc_123456')).toBe('data-ms-plan:price');
-            expect(getPlanAttribute('prc_abc123')).toBe('data-ms-plan:price');
+        it('should return data-ms-price:update for price IDs', () => {
+            expect(getPlanAttribute('prc_123456')).toBe('data-ms-price:update');
+            expect(getPlanAttribute('prc_abc123')).toBe('data-ms-price:update');
         });
 
         it('should return data-ms-plan:add for plan IDs', () => {
@@ -62,7 +62,7 @@ describe('planAttributeHelpers', () => {
         });
 
         it('should handle edge cases', () => {
-            expect(getPlanAttribute('prc_')).toBe('data-ms-plan:price');
+            expect(getPlanAttribute('prc_')).toBe('data-ms-price:update');
             expect(getPlanAttribute('pln_')).toBe('data-ms-plan:add');
             expect(getPlanAttribute('PRC_123')).toBeNull(); // case sensitive
             expect(getPlanAttribute('PLN_123')).toBeNull(); // case sensitive
@@ -77,7 +77,7 @@ describe('planAttributeHelpers', () => {
             replaceDataMsPlanAttribute(element, 'mem_old123', importedMemberships);
 
             expect(element.removeAttribute).toHaveBeenCalledWith('data-ms-plan');
-            expect(element.setAttribute).toHaveBeenCalledWith('data-ms-plan:price', 'prc_new456');
+            expect(element.setAttribute).toHaveBeenCalledWith('data-ms-price:update', 'prc_new456');
         });
 
         it('should successfully replace plan attribute with plan ID', () => {
@@ -119,7 +119,7 @@ describe('planAttributeHelpers', () => {
             replaceDataMsMembershipAttribute(element, 'mem_old123', importedMemberships);
 
             expect(element.removeAttribute).toHaveBeenCalledWith('data-ms-membership');
-            expect(element.setAttribute).toHaveBeenCalledWith('data-ms-plan:price', 'prc_new456');
+            expect(element.setAttribute).toHaveBeenCalledWith('data-ms-price:update', 'prc_new456');
         });
 
         it('should add modal attribute to anchor tags with href="#"', () => {
@@ -285,7 +285,7 @@ describe('planAttributeHelpers', () => {
             const link = document.querySelector('a');
             const div = document.querySelector('div');
 
-            expect(button?.getAttribute('data-ms-plan:price')).toBe('prc_price1');
+            expect(button?.getAttribute('data-ms-price:update')).toBe('prc_price1');
             expect(link?.getAttribute('data-ms-plan:add')).toBe('pln_plan1');
             expect(link?.getAttribute('data-ms-modal')).toBe('signup');
             expect(div?.getAttribute('data-ms-plan:add')).toBe('pln_plan2');

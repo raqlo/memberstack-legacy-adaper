@@ -8,7 +8,7 @@
  *
  * @example
  * // Before: <a href="#" data-ms-membership="mem_old789">Join</a>
- * // After:  <a href="#" data-ms-plan:price="prc_new123" data-ms-modal="signup">Join</a>
+ * // After:  <a href="#" data-ms-price:update="prc_new123" data-ms-modal="signup">Join</a>
  */
 
 import {logger} from "@utils/logger";
@@ -18,14 +18,13 @@ export function getPlanAttribute(id: string): string | null {
     logger('debug', `[Adapter] Getting plan attribute for ID: ${id}`);
 
     if (id.startsWith("prc_")) {
-        logger('debug', `[Adapter] ID "${id}" is a price ID, returning data-ms-plan:price`);
-        return "data-ms-plan:price";
+        logger('debug', `[Adapter] ID "${id}" is a price ID, returning data-ms-price:update`);
+        return "data-ms-price:update";
     }
     if (id.startsWith("pln_")) {
         logger('debug', `[Adapter] ID "${id}" is a plan ID, returning data-ms-plan:add`);
         return "data-ms-plan:add";
     }
-
     logger('error', `[Adapter] Unknown ID format: "${id}" - expected prc_ or pln_ prefix`);
     return null;
 }

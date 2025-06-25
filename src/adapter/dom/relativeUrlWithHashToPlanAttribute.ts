@@ -5,7 +5,7 @@
  *
  * @example
  * // Before: <a href="/pricing#/ms/signup/prc_123">View Pricing</a>
- * // After: <a href="/pricing" data-ms-plan:price="prc_456">View Pricing</a>
+ * // After: <a href="/pricing" data-ms-price:update="prc_456">View Pricing</a>
  *
  * @example
  * // Before: <a href="/plans#/ms/signup/pln_789">Subscribe</a>
