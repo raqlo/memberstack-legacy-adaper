@@ -26,7 +26,19 @@ export default defineConfig((_params) => {
             rollupOptions: {
                 external: ['jquery'],
                 input: resolve(__dirname, 'src/main.ts'),
+            },
+            terserOptions: {
+                compress: {
+                    drop_console: false,
+                },
+                mangle: {
+                    keep_fnames: true,
+                },
+                format: {
+                    comments: false,
+                },
             }
+
         },
         test: {
             environment: 'jsdom', // Needed for DOM testing

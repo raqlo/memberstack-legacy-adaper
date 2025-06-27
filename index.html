@@ -29,8 +29,8 @@
           rel="apple-touch-icon"/>
     <!-- Memberstack -->
     <!--    <script src="https://api.memberstack.io/static/memberstack.js?webflow" data-memberstack-id="888c1db997d6d6e5601e4d3ffc5f0ba9"> </script>-->
-    <script src="/src/main.ts" type="module"></script>
-    <!--    <script src="http://localhost:4173/memberstack-adapter.js"></script>-->
+<!--    <script src="/src/main.ts" type="module"></script>-->
+        <script src="http://localhost:4173/memberstack-adapter.js"></script>
 
 </head>
 <body>
@@ -48,14 +48,11 @@
      * While developing, I cannot simulate a blocking script on the page because module scripts are loaded asynchronously.
      * Because of this, I am using the load event to simulate the blocking script.
      */
-    window.addEventListener('load', () => {
         
         window.MemberStack.onReady.then(e => console.log(e))
         
+    //throws error of memberstack undefined
         console.log(window.MemberStack.getToken())
-    })
-    
-
 
 </script>
 </body>

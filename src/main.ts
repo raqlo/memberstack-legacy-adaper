@@ -1,7 +1,7 @@
 import {shouldUseAdapter} from './loader/detect-ms-version';
 import {createLegacyProxy} from './adapter';
 import {logger} from '@utils/logger';
-import {type AdapterConfig, config} from "./config";
+import {config} from "./config";
 import {deleteV1Session} from "@utils/sessions";
 import {updateAllPlanAttributes} from "@dom/replacePlanAttributes";
 import {updateAllLogoutAttributes} from "@dom/replaceUtilityAuthAttributes";
@@ -16,8 +16,9 @@ import {
     hideProfileModalOnUnAuth
 } from "@dom/hideElemsOnAuth";
 import {transformMembershipRedirectLinks} from "@dom/hashUrlToMsActionTransformer";
+import {executeMemberstackV1, executeMemberstackV2} from "@/vendor/memberstack";
 
-async function enableLegacyAdapter() {
+function enableLegacyAdapter() {
     // exec before memberstack loads
     document.addEventListener('DOMContentLoaded', () => {
         updateAllPlanAttributes(config.adapter.importedMemberships);
@@ -30,7 +31,8 @@ async function enableLegacyAdapter() {
     logger('trace', '[Adapter] starting legacy adapter...')
     try {
         if (!window.$memberstackDom) {
-            await loadScript('https://static.memberstack.com/scripts/v1/memberstack.js', config);
+            // loadScriptSync('https://static.memberstack.com/scripts/v1/memberstack.js', config);
+            executeMemberstackV2(config)
         }
 
         const msDom = window.$memberstackDom;
@@ -54,26 +56,6 @@ async function enableLegacyAdapter() {
             logger('error', `[Adapter] Unknown error: ${e}`);
         }
     }
-}
-
-function loadScript(src: string, config: Partial<AdapterConfig>) {
-    window.memberstackConfig = window.memberstackConfig || config;
-    return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = () => resolve(null);
-        script.onerror = () => {
-            document.head.removeChild(script);
-            reject(new Error(`Failed to load ${src}`));
-        };
-
-        if (config.adapter?.currentVersion === 'v1') {
-            const scr = document.head.appendChild(script)
-            scr.setAttribute('data-memberstack-id', config.appIdV1!)
-        } else {
-            document.head.appendChild(script)
-        }
-    });
 }
 
 /**
@@ -115,9 +97,10 @@ function patchMemberStackOnReady() {
         logger('start', '[Adapter] V2 Adapter enabled.');
         deleteV1Session();
         patchMemberStackOnReady();
-        await enableLegacyAdapter();
+        enableLegacyAdapter();
     } else {
         logger('start', '[Adapter] Adapter not enabled — using v1.');
-        await loadScript('https://api.memberstack.io/static/memberstack.js?webflow', config);
+        // loadScriptSync('https://api.memberstack.io/static/memberstack.js?webflow', config);
+        executeMemberstackV1(config)
     }
 })()
