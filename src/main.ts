@@ -17,6 +17,7 @@ import {
 } from "@dom/hideElemsOnAuth";
 import {transformMembershipRedirectLinks} from "@dom/hashUrlToMsActionTransformer";
 import {executeMemberstackV1, executeMemberstackV2} from "@/vendor/memberstack";
+import {createVersionDiv} from "@adapter/version-flag";
 
 function enableLegacyAdapter() {
     // exec before memberstack loads
@@ -31,7 +32,6 @@ function enableLegacyAdapter() {
     logger('trace', '[Adapter] starting legacy adapter...')
     try {
         if (!window.$memberstackDom) {
-            // loadScriptSync('https://static.memberstack.com/scripts/v1/memberstack.js', config);
             executeMemberstackV2(config)
         }
 
@@ -93,14 +93,18 @@ function patchMemberStackOnReady() {
         logger('start', '[Adapter] Adapter disabled.');
         return;
     }
-    if (shouldUseAdapter(config) === 'v2') {
+
+    const currentVersion = shouldUseAdapter(config)
+    config.adapter.currentVersion = currentVersion
+    createVersionDiv(config)
+
+    if (currentVersion === 'v2') {
         logger('start', '[Adapter] V2 Adapter enabled.');
         deleteV1Session();
         patchMemberStackOnReady();
         enableLegacyAdapter();
     } else {
         logger('start', '[Adapter] Adapter not enabled — using v1.');
-        // loadScriptSync('https://api.memberstack.io/static/memberstack.js?webflow', config);
         executeMemberstackV1(config)
     }
 })()

@@ -6,6 +6,7 @@ export interface AdapterConfig extends DOMConfig {
     adapter: {
         enabled: boolean;
         currentVersion?: "v1" | "v2"; // readonly
+        showVersion: boolean;
         importedMemberships: MembershipsMap[];
         forcedVersion?: "v1" | "v2";
         loginUrl?: string;
@@ -18,6 +19,7 @@ export interface AdapterConfig extends DOMConfig {
 const defaultConfig: AdapterConfig = {
     adapter: {
         enabled: true,
+        showVersion: true,
         importedMemberships: import.meta.env.VITE_MEMBERSHIPS_MAP_TARGET ? JSON.parse(import.meta.env.VITE_MEMBERSHIPS_MAP_TARGET) : {},
         loginUrl: import.meta.env.VITE_LOGIN_URL,
         forcedVersion: 'v2'
