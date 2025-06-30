@@ -1,6 +1,6 @@
-import type { AdapterConfig } from "@/config";
+import type {AdapterConfig} from "@/config";
 
-function createVersionDiv( config: AdapterConfig): HTMLDivElement | null {
+function createVersionDiv(config: AdapterConfig): HTMLDivElement | null {
     if (!config.adapter.showVersion) {
         return null;
     }
@@ -23,13 +23,16 @@ function createVersionDiv( config: AdapterConfig): HTMLDivElement | null {
         zIndex: '1000',
     });
 
-    document.body.appendChild(versionDiv);
+    // wait until dom loads to insert div
+    document.addEventListener('DOMContentLoaded', () => {
+        document.body.appendChild(versionDiv);
+    })
     return versionDiv;
 }
 
 function getCurrentVersion(config: AdapterConfig): string {
-   return config.adapter.currentVersion || 'unknown version';
+    return config.adapter.currentVersion || 'unknown version';
 }
 
 
-export { createVersionDiv, getCurrentVersion };
+export {createVersionDiv, getCurrentVersion};

@@ -95,7 +95,7 @@ function patchMemberStackOnReady() {
     }
 
     const currentVersion = shouldUseAdapter(config)
-    config.adapter.currentVersion = currentVersion
+    config.adapter.currentVersion = currentVersion;
     createVersionDiv(config)
 
     if (currentVersion === 'v2') {
