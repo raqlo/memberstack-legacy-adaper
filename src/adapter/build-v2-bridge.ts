@@ -42,7 +42,8 @@ let cachedOnReady: onReadyPayload | undefined;
  */
 
 function pollForMsV2(resolve: (payload: onReadyPayload) => void) {
-    const currentMember = getCurrentMemberV2()
+    const currentMember = getCurrentMemberV2();
+    const customFields = currentMember?.customFields || {};
     resolve({
         email: currentMember?.auth?.email || '',
         loggedIn: isMemberAuthV2(),
@@ -68,7 +69,8 @@ function pollForMsV2(resolve: (payload: onReadyPayload) => void) {
         },
         // ToDo find out how to adapt these into v2
         memberPage: undefined,
-        membership: null
+        membership: null,
+        ...customFields
     });
 }
 
