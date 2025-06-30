@@ -22,12 +22,7 @@ import {createVersionDiv} from "@adapter/version-flag";
 function enableLegacyAdapter() {
     // exec before memberstack loads
     document.addEventListener('DOMContentLoaded', () => {
-        updateAllPlanAttributes(config.adapter.importedMemberships);
-        processRelativeUrlWithHashUrls(config.adapter.importedMemberships)
-        updateAllLogoutAttributes();
-        processPasswordResetUrls();
-        processContentUrls()
-        transformMembershipRedirectLinks()
+        beforeMemberstackLoads()
     })
     logger('trace', '[Adapter] starting legacy adapter...')
     try {
@@ -42,12 +37,11 @@ function enableLegacyAdapter() {
 
         window.MemberStack = createLegacyProxy(msDom);
         // exec after memberstack loads
-        updateAllMemberUpdates({
-            importMemberships: config.adapter.importedMemberships,
-            loginUrl: config.adapter.loginUrl
-        })
-        hideProfileModalOnUnAuth()
-        hideLoginModalOnAuth();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            afterMemberstackLoads()
+        });
+
         logger('trace', '[Adapter] 2.0 adapter enabled and injected.');
     } catch (e) {
         if (e instanceof Error && e.message) {
@@ -56,6 +50,24 @@ function enableLegacyAdapter() {
             logger('error', `[Adapter] Unknown error: ${e}`);
         }
     }
+}
+
+function afterMemberstackLoads() {
+    hideProfileModalOnUnAuth()
+    hideLoginModalOnAuth();
+    updateAllMemberUpdates({
+        importMemberships: config.adapter.importedMemberships,
+        loginUrl: config.adapter.loginUrl
+    })
+}
+
+function beforeMemberstackLoads() {
+    updateAllPlanAttributes(config.adapter.importedMemberships);
+    processRelativeUrlWithHashUrls(config.adapter.importedMemberships)
+    updateAllLogoutAttributes();
+    processPasswordResetUrls();
+    processContentUrls()
+    transformMembershipRedirectLinks()
 }
 
 /**

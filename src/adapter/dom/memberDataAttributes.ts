@@ -50,10 +50,10 @@ function formatSignupDate(memberData: v2CurrentMember): string {
     logger('debug', '[Adapter] Formatting signup date');
 
     if (!memberData.createdAt) {
-        logger('warn', '[Adapter] No signup date found in member data');
         return '';
     }
     try {
+        debugger;
         const date = new Date(memberData.createdAt);
 
         if (isNaN(date.getTime())) {
@@ -145,6 +145,7 @@ export function updateAllMemberAttributes(importedMemberships: MembershipsMap[])
 
     // Handle signup-date.DateTimeFormat() attributes
     const signupDateElements = document.querySelectorAll("[data-ms-member='signup-date.DateTimeFormat()']");
+    debugger;
     if(signupDateElements.length) {
         logger('warn', `[Adapter] Found ${signupDateElements.length} elements with signup-date.DateTimeFormat() attributes`);
 
