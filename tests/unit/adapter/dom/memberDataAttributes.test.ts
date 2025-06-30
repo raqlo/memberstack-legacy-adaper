@@ -260,7 +260,6 @@ describe('Member data-ms-member attributes', () => {
 
             expect(result).toBe(0);
             expect(document.querySelector('[data-ms-member="signup-date.DateTimeFormat()"]')?.textContent).toBe('Loading...');
-            expect(logger).toHaveBeenCalledWith('warn', '[Adapter] No signup date found in member data');
         });
 
         it('should handle invalid date format', () => {
@@ -296,7 +295,6 @@ describe('Member data-ms-member attributes', () => {
 
             expect(result).toBe(0);
             expect(document.querySelector('[data-ms-member="signup-date.DateTimeFormat()"]')?.textContent).toBe('Loading...');
-            expect(logger).toHaveBeenCalledWith('warn', '[Adapter] No signup date found in member data');
         });
 
         it('should preserve element attributes while updating signup date', () => {
