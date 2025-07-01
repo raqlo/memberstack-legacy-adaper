@@ -37,10 +37,13 @@ function enableLegacyAdapter() {
 
         window.MemberStack = createLegacyProxy(msDom);
         // exec after memberstack loads
-
-        document.addEventListener('DOMContentLoaded', () => {
+        if (window.$memberstackReady) {
             afterMemberstackLoads()
-        });
+        } else {
+            document.addEventListener('memberstack.ready', () => {
+                afterMemberstackLoads()
+            });
+        }
 
         logger('trace', '[Adapter] 2.0 adapter enabled and injected.');
     } catch (e) {
