@@ -13,14 +13,14 @@ function createVersionDiv(config: AdapterConfig): HTMLDivElement | null {
     Object.assign(versionDiv.style, {
         position: 'fixed',
         bottom: '10px',
-        right: '10px',
+        left: '10px',
         padding: '4px 8px',
         backgroundColor: '#f0f0f0',
         border: '1px solid #ccc',
         borderRadius: '4px',
         fontSize: '12px',
         color: '#666',
-        zIndex: '1000',
+        zIndex: '99999',
     });
 
     // wait until dom loads to insert div
